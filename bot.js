@@ -64,7 +64,7 @@ client.on('messageCreate', async msg => {
     }
 
     else if(configFile.channels.includes(curchannel)) {
-        console.log(msg.content);
+        //console.log(msg.content);
         let emoji = msg.content;
         let picList = [];
         if(emoji.startsWith(":") && emoji.endsWith(":")) {
@@ -75,18 +75,22 @@ client.on('messageCreate', async msg => {
                 let endIndex = tmp.indexOf(":");
                 emoji = tmp.slice(0, endIndex);
                 tmp = tmp.slice(endIndex+1);
-                //console.log(emoji);
-                //console.log(tmp);
                 let pic = client.emojis.cache.find(e => e.name === emoji);
-                //console.log(pic);
                 if(pic) {
-                    picList.push({ "id": pic.id, "name": pic.name });
+                    console.log("::1");
+                    picList.push({ "id": pic.id, "name": pic.name, "animated": pic.animated });
                 }
             }
             let picMsg = "";
             for(let i=0; i<picList.length; i++) {
-                picMsg += "<a:"+picList[i].name+":"+picList[i].id+">"
+                if(picList[i].animated) {
+                    picMsg += "<a:"+picList[i].name+":"+picList[i].id+">";
+                }
+                else {
+                    picMsg += "<:"+picList[i].name+":"+picList[i].id+">";
+                }
             }
+            if(!picMsg) return;
             let webhookch = client.channels.cache.get(curchannel);
             const webhooks = await webhookch.fetchWebhooks();
             const webhook = webhooks.first();
