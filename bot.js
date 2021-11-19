@@ -1,13 +1,20 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const mute = require('./modules/mute.js');
 const { start } = require('repl');
 require('dotenv').config();
 const token = process.env.TOKEN;
 const prefix = "ma/";
+const userPrefix = "->";
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
 
 client.once('ready', () => {
+    var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
+    blackListFile.members = [];
+    fs.writeFileSync("./blackList.json", JSON.stringify(blackListFile), (err) => {
+        if(err) console.log(err);
+    });
     console.log('Logged in as %s !', client.user.tag);
 });
 
@@ -17,11 +24,13 @@ client.on('messageCreate', async msg => {
 	if(msg.webhookID) return;
 
     var configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
+    var blackListFile = await JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     const userTag = msg.author.tag;
 	const userID = msg.author.id;
 	const userAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=256`;
 
     const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
+    const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
 
     if(msg.content.startsWith(prefix) && msg.member.roles.cache.has(adminRole.id)) {
@@ -63,6 +72,24 @@ client.on('messageCreate', async msg => {
 		}
     }
 
+    else if(msg.content.startsWith(userPrefix) && (userTag === "Pierre#9505" || msg.member.roles.cache.has(adminRole.id))) {
+        const args = msg.content.slice(userPrefix.length).split(' ');
+		const cmd = args.shift().toLowerCase();
+
+        if(cmd === "mute" && !isNaN(parseInt(args[1])) && args.length === 2) {
+            let Mute = new mute.mute(client, msg, args[0], args[1]);
+            Mute.addMuteMember(false);
+        }
+        else if(cmd === "ultmute" && !isNaN(parseInt(args[1])) && args.length === 2) {
+            let Mute = new mute.mute(client, msg, args[0], args[1]);
+            Mute.addMuteMember(true);
+        }
+    }
+
+    else if((msg.member.roles.cache.has(muteRole.id) || blackListFile.members.includes(userID)) && userTag != "Pierre#9505") {
+        msg.delete();
+    }
+
     else if(configFile.channels.includes(curchannel)) {
         //console.log(msg.content);
         let emoji = msg.content;
@@ -77,7 +104,6 @@ client.on('messageCreate', async msg => {
                 tmp = tmp.slice(endIndex+1);
                 let pic = client.emojis.cache.find(e => e.name === emoji);
                 if(pic) {
-                    console.log("::1");
                     picList.push({ "id": pic.id, "name": pic.name, "animated": pic.animated });
                 }
             }
