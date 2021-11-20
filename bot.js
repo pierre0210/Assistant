@@ -9,6 +9,19 @@ const userPrefix = "->";
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
 
+function hasAdminPermission(msg) {
+    var configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+    for(let i=0; i<configFile.adminRoles.length; i++) {
+        var adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRoles[i]);
+        if(adminRole) {
+            if(msg.member.roles.cache.has(adminRole.id)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 client.once('ready', () => {
     var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     blackListFile.members = [];
@@ -29,11 +42,11 @@ client.on('messageCreate', async msg => {
 	const userID = msg.author.id;
 	const userAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=256`;
 
-    const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
+    //const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
 
-    if(msg.content.startsWith(prefix) && msg.member.roles.cache.has(adminRole.id)) {
+    if(msg.content.startsWith(prefix) && hasAdminPermission(msg)) {
         const args = msg.content.slice(prefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 		if(cmd === "connect") {
@@ -72,7 +85,7 @@ client.on('messageCreate', async msg => {
 		}
     }
 
-    else if(msg.content.startsWith(userPrefix) && (userTag === "Pierre#9505" || msg.member.roles.cache.has(adminRole.id))) {
+    else if(msg.content.startsWith(userPrefix) && (userTag === "Pierre#9505" || hasAdminPermission(msg))) {
         const args = msg.content.slice(userPrefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 
