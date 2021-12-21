@@ -80,10 +80,6 @@ class mute {
             }, parseInt(this.time)*60*1000);
         }
     }
-
-    muteDectect() {
-
-    }
 }
 
 module.exports.mute = mute;

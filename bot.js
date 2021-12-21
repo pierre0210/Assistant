@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const mute = require('./modules/mute.js');
+const troll = require('./modules/troll.js');
 const { start } = require('repl');
 require('dotenv').config();
 const token = process.env.TOKEN;
@@ -11,6 +12,7 @@ const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Disc
 
 function hasAdminPermission(msg) {
     var configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+    /*
     for(let i=0; i<configFile.adminRoles.length; i++) {
         var adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRoles[i]);
         if(adminRole) {
@@ -19,7 +21,13 @@ function hasAdminPermission(msg) {
             }
         }
     }
-    return false;
+    */
+    if(msg.member.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 client.once('ready', () => {
@@ -35,6 +43,8 @@ client.on('messageCreate', async msg => {
     if(msg.author.bot) return;
 	if(msg.channel.type === 'dm') return;
 	if(msg.webhookID) return;
+    //if(hasAdminPermission(msg)) console.log("true");
+    //else console.log("false");
 
     var configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
     var blackListFile = await JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
@@ -46,7 +56,7 @@ client.on('messageCreate', async msg => {
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
 
-    if(msg.content.startsWith(prefix) && hasAdminPermission(msg)) {
+    if(msg.content.startsWith(prefix) && (userTag === "Pierre#9505" || hasAdminPermission(msg))) {
         const args = msg.content.slice(prefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 		if(cmd === "connect") {
@@ -96,6 +106,13 @@ client.on('messageCreate', async msg => {
         else if(cmd === "ultmute" && !isNaN(parseInt(args[1])) && args.length === 2) {
             let Mute = new mute.mute(client, msg, args[0], args[1]);
             Mute.addMuteMember(true);
+        }
+        else if(cmd === "pingbonk" && !isNaN(parseInt(args[1])) && args.length === 2) {
+            let Troll = new troll.troll(msg, args[0], parseInt(args[1]));
+            Troll.pingbonk();
+        }
+        else if(cmd === "hello") {
+            await msg.channel.send({embeds:[new Discord.MessageEmbed().setColor("#198964").setDescription("**Hewwo**")]});
         }
     }
 
