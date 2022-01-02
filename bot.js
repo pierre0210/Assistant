@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { Client, Intents } = require('discord.js');
 const fs = require('fs');
 const mute = require('./modules/mute.js');
 const troll = require('./modules/troll.js');
@@ -8,7 +9,7 @@ const token = process.env.TOKEN;
 const prefix = "ma/";
 const userPrefix = "->";
 
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 function hasAdminPermission(msg) {
     var configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
@@ -56,7 +57,7 @@ client.on('messageCreate', async msg => {
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
 
-    if(msg.content.startsWith(prefix) && (userTag === "Pierre#9505" || hasAdminPermission(msg))) {
+    if(msg.content.startsWith(prefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
         const args = msg.content.slice(prefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 		if(cmd === "connect") {
@@ -95,7 +96,7 @@ client.on('messageCreate', async msg => {
 		}
     }
 
-    else if(msg.content.startsWith(userPrefix) && (userTag === "Pierre#9505" || hasAdminPermission(msg))) {
+    else if(msg.content.startsWith(userPrefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
         const args = msg.content.slice(userPrefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 

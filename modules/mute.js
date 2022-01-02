@@ -36,7 +36,7 @@ class mute {
     async addMuteMember(isUlt) {
         if(isUlt) {
             const muteEmbed = new Discord.MessageEmbed().setColor("#ff0000")
-                .setDescription(this.tag+" 去西伯利亞勞改");
+                .setDescription(this.tag+" 哈哈，去新疆");
             const unmuteEmbed = new Discord.MessageEmbed().setColor("#00ff00")
                 .setDescription(this.tag+" 出關");
             //var configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
