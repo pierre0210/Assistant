@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { Client, Intents } = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const mute = require('./modules/mute.js');
 const troll = require('./modules/troll.js');
@@ -10,6 +10,7 @@ const prefix = "ma/";
 const userPrefix = "->";
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+client.commands = new Collection();
 
 function hasAdminPermission(msg) {
     var configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
@@ -32,6 +33,14 @@ function hasAdminPermission(msg) {
 }
 
 client.once('ready', () => {
+    const commandFiles = fs.readdirSync("./commands/").filter(f => f.endsWith(".js"));
+    for(const cmd of commandFiles) {
+        let tmp = require(`./commands/${cmd}`);
+        client.commands.set(cmd.split(".")[0], tmp);
+        console.log(cmd + " is loaded.");
+    }
+    console.log("[ " + commandFiles.length + " ] are commands loaded.");
+
     var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     blackListFile.members = [];
     fs.writeFileSync("./blackList.json", JSON.stringify(blackListFile), (err) => {
@@ -52,10 +61,16 @@ client.on('messageCreate', async msg => {
     const userTag = msg.author.tag;
 	const userID = msg.author.id;
 	const userAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=256`;
+    var now = new Date();
 
     //const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
+    const msgTrig = configFile.msgTrig === 1 ? true : false;
+
+    if(userID === "678493512836317194" && now.getHours() < 21 && now.getHours() > 7 && msgTrig) {
+        await msg.reply("**還沒九點快去讀書!**");
+    }
 
     if(msg.content.startsWith(prefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
         const args = msg.content.slice(prefix.length).split(' ');
@@ -100,20 +115,9 @@ client.on('messageCreate', async msg => {
         const args = msg.content.slice(userPrefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 
-        if(cmd === "mute" && !isNaN(parseInt(args[1])) && args.length === 2) {
-            let Mute = new mute.mute(client, msg, args[0], args[1]);
-            Mute.addMuteMember(false);
-        }
-        else if(cmd === "ultmute" && !isNaN(parseInt(args[1])) && args.length === 2) {
-            let Mute = new mute.mute(client, msg, args[0], args[1]);
-            Mute.addMuteMember(true);
-        }
-        else if(cmd === "pingbonk" && !isNaN(parseInt(args[1])) && args.length === 2) {
-            let Troll = new troll.troll(msg, args[0], parseInt(args[1]));
-            Troll.pingbonk();
-        }
-        else if(cmd === "hello") {
-            await msg.channel.send({embeds:[new Discord.MessageEmbed().setColor("#198964").setDescription("**Hewwo**")]});
+        let command = client.commands.get(cmd);
+        if(command) {
+            command.run(client, msg, userTag, userID, args);
         }
     }
 
