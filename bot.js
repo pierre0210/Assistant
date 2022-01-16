@@ -25,9 +25,11 @@ function hasAdminPermission(msg) {
     }
     */
     if(msg.member.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+        console.log("true");
         return true;
     }
     else {
+        console.log("false");
         return false;
     }
 }
@@ -46,7 +48,7 @@ client.once('ready', () => {
     fs.writeFileSync("./blackList.json", JSON.stringify(blackListFile), (err) => {
         if(err) console.log(err);
     });
-    console.log('Logged in as %s !', client.user.tag);
+    console.log('\nLogged in as %s !', client.user.tag);
 });
 
 client.on('messageCreate', async msg => {
@@ -66,11 +68,6 @@ client.on('messageCreate', async msg => {
     //const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
-    const msgTrig = configFile.msgTrig === 1 ? true : false;
-
-    if(userID === "678493512836317194" && now.getHours() < 21 && now.getHours() > 7 && msgTrig) {
-        await msg.reply("**還沒九點快去讀書!**");
-    }
 
     if(msg.content.startsWith(prefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
         const args = msg.content.slice(prefix.length).split(' ');
