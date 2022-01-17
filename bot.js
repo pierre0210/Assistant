@@ -1,8 +1,6 @@
 const Discord = require('discord.js');
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
-const mute = require('./modules/mute.js');
-const troll = require('./modules/troll.js');
 const { start } = require('repl');
 require('dotenv').config();
 const token = process.env.TOKEN;
