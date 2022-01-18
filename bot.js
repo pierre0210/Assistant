@@ -188,7 +188,7 @@ client.on("interactionCreate", async interaction => {
     else if(interaction.isButton()) {
         //onsole.log(interaction.user.id);
         if(interaction.customId === "dontclick") {
-            client.users.cache.get(interaction.user.id).send("Why are u such a cunt?");
+            client.users.cache.get(interaction.user.id).send("Told u don't click that!");
             interaction.deferUpdate();
         }
     }
