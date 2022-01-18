@@ -9,6 +9,7 @@ const userPrefix = "->";
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 client.commands = new Collection();
+client.slashCommands = new Collection();
 
 function hasAdminPermission(msg) {
     var configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
@@ -39,7 +40,16 @@ client.once('ready', () => {
         client.commands.set(cmd.split(".")[0], tmp);
         console.log(cmd + " is loaded.");
     }
-    console.log("[ " + commandFiles.length + " ] are commands loaded.");
+    console.log("[ " + commandFiles.length + " ] commands are loaded.");
+
+    console.log("\n");
+    const slashCommandFiles = fs.readdirSync("./slashCommands/").filter(f => f.endsWith(".js"));
+    for(const slash of slashCommandFiles) {
+        let tmp = require(`./slashCommands/${slash}`);
+        client.slashCommands.set(tmp.data.name, tmp);
+        console.log(slash + " is loaded.");
+    }
+    console.log("[ " + slashCommandFiles.length + " ] slash commands are loaded.");
 
     var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     blackListFile.members = [];
@@ -156,6 +166,30 @@ client.on('messageCreate', async msg => {
                 avatarURL: userAvatar
             });
             await msg.delete();
+        }
+    }
+});
+
+client.on("interactionCreate", async interaction => {
+    if (interaction.user.bot) return;
+    if (interaction.isCommand()) {
+        const cmd = client.slashCommands.get(interaction.commandName);
+
+        if(cmd) {
+            //console.log(cmd);
+            try {
+                await cmd.run(interaction);
+            } catch(error) {
+                console.log(error);
+            }
+        }
+    }
+    
+    else if(interaction.isButton()) {
+        //onsole.log(interaction.user.id);
+        if(interaction.customId === "dontclick") {
+            client.users.cache.get(interaction.user.id).send("Why are u such a cunt?");
+            interaction.deferUpdate();
         }
     }
 });
