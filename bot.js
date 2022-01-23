@@ -4,7 +4,7 @@ const fs = require('fs');
 const { start } = require('repl');
 require('dotenv').config();
 const token = process.env.TOKEN;
-const prefix = "ma/";
+const prefix = "->>";
 const userPrefix = "->";
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -12,23 +12,12 @@ client.commands = new Collection();
 client.slashCommands = new Collection();
 
 function hasAdminPermission(msg) {
-    var configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-    /*
-    for(let i=0; i<configFile.adminRoles.length; i++) {
-        var adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRoles[i]);
-        if(adminRole) {
-            if(msg.member.roles.cache.has(adminRole.id)) {
-                return true;
-            }
-        }
-    }
-    */
     if(msg.member.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
-        console.log("true");
+        //console.log("true");
         return true;
     }
     else {
-        console.log("false");
+        //console.log("false");
         return false;
     }
 }
