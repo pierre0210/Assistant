@@ -6,12 +6,12 @@ async function run(interaction) {
         const user = interaction.options.getUser('target');
         const infoEmbed = new MessageEmbed().setColor("#198964")
             .setDescription(`**User name:** ${user.username}\n**User id:** ${user.id}`);
-        interaction.reply({ embeds:[infoEmbed] });
+        await interaction.reply({ embeds:[infoEmbed] });
     }
     else if(interaction.options.getSubcommand() === 'server') {
         const infoEmbed = new MessageEmbed().setColor("#198964")
             .setDescription(`**Server name:** ${interaction.guild.name}\n**Total members:** ${interaction.guild.memberCount}`);
-        interaction.reply({ embeds:[infoEmbed] });
+        await interaction.reply({ embeds:[infoEmbed] });
     }
 }
 
