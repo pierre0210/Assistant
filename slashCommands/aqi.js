@@ -10,10 +10,7 @@ async function run(interaction) {
         method: 'GET',
         url: apiUrl
     };
-    if(countyName === null) {
-        await interaction.reply('Wrong format!');
-        return;
-    }
+    
     request(options, (err, response, body) => {
         if(err) return;
         else if(!body) {
@@ -53,6 +50,6 @@ async function run(interaction) {
 module.exports.data = new SlashCommandBuilder()
     .setName('aqi')
     .setDescription('Air quality')
-    .addStringOption(option => option.setName('county').setDescription('e.g. OO市 or XX縣'));
+    .addStringOption(option => option.setName('county').setDescription('e.g. OO市 or XX縣').setRequired(true));
 
 module.exports.run = run;
