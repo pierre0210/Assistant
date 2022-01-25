@@ -5,7 +5,7 @@ require('dotenv').config();
 
 async function run(interaction) {
     const countyName = interaction.options.getString('county');
-    const apiUrl = `https://data.epa.gov.tw/api/v1/aqx_p_432?limit=1000&api_key=${process.env.AQI_KEY}&sort=ImportDate%20desc&format=json`
+    const apiUrl = `https://data.epa.gov.tw/api/v1/aqx_p_432?limit=1000&api_key=${process.env.AQI_KEY}&sort=ImportDate%20desc&format=json`;
     const options = {
         method: 'GET',
         url: apiUrl
