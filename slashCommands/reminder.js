@@ -59,7 +59,7 @@ async function run(interaction) {
 module.exports.data = new SlashCommandBuilder()
     .setName('reminder')
     .setDescription('It will remind you about something')
-    .addStringOption(option => option.setName('time').setDescription('formate: 00h00m00s'))
-    .addStringOption(option => option.setName('event').setDescription('things you are too stupid to remember'));
+    .addStringOption(option => option.setName('time').setDescription('formate: 00h00m00s').setRequired(true))
+    .addStringOption(option => option.setName('event').setDescription('things you are too stupid to remember').setRequired(true));
 
 module.exports.run = run;

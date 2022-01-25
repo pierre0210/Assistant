@@ -21,7 +21,7 @@ module.exports.data = new SlashCommandBuilder()
     .addSubcommand(sub => sub
         .setName('user')
         .setDescription('info about a user')
-        .addUserOption(option => option.setName('target').setDescription('target user')))
+        .addUserOption(option => option.setName('target').setDescription('target user').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('server')
         .setDescription('info about the server'));
