@@ -2,9 +2,9 @@ const Discord = require('discord.js');
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const { start } = require('repl');
+const util = require('./modules/utility.js');
 require('dotenv').config();
 const token = process.env.TOKEN;
-const prefix = "->>";
 const userPrefix = "->";
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -66,46 +66,7 @@ client.on('messageCreate', async msg => {
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
 
-    if(msg.content.startsWith(prefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
-        const args = msg.content.slice(prefix.length).split(' ');
-		const cmd = args.shift().toLowerCase();
-		if(cmd === "connect") {
-			let channel = ""
-			if(args.length > 0) {
-				channel = args[0];
-			}
-			else {
-				channel = msg.channel.id;
-			}
-			
-			configFile.channels.push(channel);
-			fs.writeFileSync("./config.json", JSON.stringify(configFile), (err) => {
-				if(err) console.log(err);
-			});
-			await msg.channel.send({embeds:[new Discord.MessageEmbed().setColor("#198964").setDescription("**Connected!** to "+client.user.tag)]});
-		}
-		else if(cmd === "disconnect") {
-			let channel = ""
-			if(args.length > 0) {
-				channel = args[0];
-			}
-			else {
-				channel = msg.channel.id;
-			}
-
-			for(let i=0; i<configFile.channels.length; i++) {
-				if(configFile.channels[i] === channel) {
-					configFile.channels.splice(i, 1);
-				}
-			}
-			fs.writeFileSync("./config.json", JSON.stringify(configFile), (err) => {
-				if(err) console.log(err);
-			});
-			await msg.channel.send({embeds:[new Discord.MessageEmbed().setColor("#198964").setDescription("**Disconnected!**")]});
-		}
-    }
-
-    else if(msg.content.startsWith(userPrefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
+    if(msg.content.startsWith(userPrefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
         const args = msg.content.slice(userPrefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 
@@ -117,6 +78,10 @@ client.on('messageCreate', async msg => {
 
     else if((msg.member.roles.cache.has(muteRole.id) || blackListFile.members.includes(userID)) && userTag != "Pierre#9505") {
         msg.delete();
+    }
+
+    else if(msg.content.endsWith("機率")) {
+        await msg.channel.send(`${util.getRandomNum(0, 100)}%`);
     }
 
     else if(configFile.channels.includes(curchannel)) {
