@@ -10,10 +10,6 @@ async function run(interaction) {
         method: 'GET',
         url: apiUrl
     };
-    if(countyName === null) {
-        await interaction.reply('Wrong format!');
-        return;
-    }
     request(options, (err, response, body) => {
         if(err) return;
         else if(!body) {
@@ -34,6 +30,9 @@ async function run(interaction) {
         //console.log(regionList);
         if(targetRegion === {}) {
             interaction.reply('請檢查城市名稱是否正確(正體簡體亦會有影響)');
+        }
+        else if(!targetRegion.weatherElement) {
+            interaction.reply('無法預期之錯誤');
         }
         else {
             const infoEmbed = new MessageEmbed().setColor('#198964')
