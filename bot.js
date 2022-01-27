@@ -84,11 +84,11 @@ client.on('messageCreate', async msg => {
         await msg.channel.send(`${util.getRandomNum(0, 100)}%`);
     }
 
-    else if(configFile.channels.includes(curchannel)) {
+    else if(msg.content.startsWith(":") && msg.content.endsWith(":")) { 
         //console.log(msg.content);
         let emoji = msg.content;
         let picList = [];
-        if(emoji.startsWith(":") && emoji.endsWith(":")) {
+        if(configFile.channels.includes(curchannel)) {
             let startIndex = emoji.indexOf(":")+1
             let tmp = emoji.slice(startIndex);
             //console.log(emoji);
