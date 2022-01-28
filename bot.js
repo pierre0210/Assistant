@@ -127,7 +127,7 @@ client.on('messageCreate', async msg => {
 
     else {
         let count = 0;
-        const scorePerCount = 10;
+        const scorePerCount = 50;
         for(const word of wordsFile.badWords) {
             if(msg.content.includes(word)) {
                 count++;
