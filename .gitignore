@@ -1,3 +1,5 @@
 node_modules
 .env
 database.sqlite
+modules/socialCreditScore/words.json
+config.json
