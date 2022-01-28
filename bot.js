@@ -3,6 +3,7 @@ const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const { start } = require('repl');
 const util = require('./modules/utility.js');
+const SC = require('./modules/socialCreditScore/socialCredit.js');
 require('dotenv').config();
 const token = process.env.TOKEN;
 const userPrefix = "->";
@@ -56,6 +57,7 @@ client.on('messageCreate', async msg => {
     //else console.log("false");
 
     var configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
+    var wordsFile = await JSON.parse(fs.readFileSync("./modules/socialCreditScore/words.json", "utf-8"));
     var blackListFile = await JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     const userTag = msg.author.tag;
 	const userID = msg.author.id;
@@ -120,6 +122,35 @@ client.on('messageCreate', async msg => {
                 avatarURL: userAvatar
             });
             await msg.delete();
+        }
+    }
+
+    else {
+        let count = 0;
+        const scorePerCount = 10;
+        for(const word of wordsFile.badWords) {
+            if(msg.content.includes(word)) {
+                count++;
+            }
+        }
+        if(!SC.isInCooldown(userID)) {
+            for(const word of wordsFile.goodWords) {
+                if(msg.content.includes(word)) {
+                    count--;
+                    SC.cooldown(userID);
+                    break;
+                }
+            }
+        }
+        let user = await SC.getUser(userID);
+        if(user) {
+            let score = user.score;
+            let newScore = score-count*scorePerCount;
+            if(newScore <= 0) {
+                newScore = 0;
+                await msg.reply("**此人為共和國劣等公民!**");
+            }
+            await SC.editUserScore(userID, newScore);
         }
     }
 });
