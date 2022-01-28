@@ -1,4 +1,4 @@
 node_modules
 .env
 database.sqlite
-modules/socialCreditScore/words.json
+modules\socialCreditScore\words.json
