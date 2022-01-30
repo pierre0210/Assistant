@@ -8,6 +8,9 @@ const wordsjson = {
     "badWords": [],
     "goodWords": []
 }
+const blacklistjson = {
+    "members": []
+}
 
 fs.writeFileSync('config.json', JSON.stringify(configjson), function(err) {
     if(err) console.log(err);
@@ -17,4 +20,9 @@ fs.writeFileSync('config.json', JSON.stringify(configjson), function(err) {
 fs.writeFileSync('./modules/socialCreditScore/words.json', JSON.stringify(wordsjson), function(err) {
     if(err) console.log(err);
     console.log("word.json created!");
+});
+
+fs.writeFileSync('blackList.json', JSON.stringify(blacklistjson), function(err) {
+    if(err) console.log(err);
+    console.log("blackList.json created!");
 });
