@@ -62,13 +62,14 @@ client.on('messageCreate', async msg => {
     const userTag = msg.author.tag;
 	const userID = msg.author.id;
 	const userAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=256`;
+    const userLargeAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=1024`;
     var now = new Date();
 
     //const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
 
-    if(msg.content.startsWith(userPrefix) && (userID === "818815468349030420" || hasAdminPermission(msg))) {
+    if(msg.content.startsWith(userPrefix) && (userID === configFile.botOwner || hasAdminPermission(msg))) {
         const args = msg.content.slice(userPrefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 
@@ -78,7 +79,7 @@ client.on('messageCreate', async msg => {
         }
     }
 
-    else if((msg.member.roles.cache.has(muteRole.id) || blackListFile.members.includes(userID)) && userTag != "Pierre#9505") {
+    else if((msg.member.roles.cache.has(muteRole.id) || blackListFile.members.includes(userID)) && userID != configFile.botOwner) {
         msg.delete();
     }
 

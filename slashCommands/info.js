@@ -5,7 +5,8 @@ async function run(interaction) {
     if(interaction.options.getSubcommand() === 'user') {
         const user = interaction.options.getUser('target');
         const infoEmbed = new MessageEmbed().setColor("#198964")
-            .setDescription(`**User name:** ${user.username}\n**User id:** ${user.id}`);
+            .setDescription(`**User name:** ${user.username}\n**User id:** ${user.id}`)
+            .setImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`);
         await interaction.reply({ embeds:[infoEmbed] });
     }
     else if(interaction.options.getSubcommand() === 'server') {
