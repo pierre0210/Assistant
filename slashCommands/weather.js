@@ -1,22 +1,24 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const request = require('request');
+//const request = require('request');
+const axios = require('axios');
 require('dotenv').config();
 
 async function run(interaction) {
     const countyName = interaction.options.getString('county');
     const apiUrl = `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${process.env.WEATHER_KEY}`;
+    /*
     const options = {
         method: 'GET',
         url: apiUrl
     };
-    request(options, (err, response, body) => {
-        if(err) return;
-        else if(!body) {
+    */
+    axios.get(apiUrl).then(({ data }) => {
+        if(!data) {
             interaction.reply('unexpected error! please try again later!');
             return;
         }
-        const obj = JSON.parse(body);
+        const obj = data;
         const list = obj.records.location;
         //console.log(list);
         let targetRegion = {};

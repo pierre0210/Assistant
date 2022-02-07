@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const request = require('request');
+//const request = require('request');
+const axios = require('axios');
 const cheerio = require('cheerio');
 
 async function run(interaction) {
@@ -8,18 +9,18 @@ async function run(interaction) {
     const amount = interaction.options.getNumber("amount");
     const currencyOption = interaction.options.getString("currency");
     const mode = interaction.options.getString("mode");
+    /*
     const options = {
         method: 'GET',
         url: url
     };
-
-    request(options, (err, response, body) => {
-        if(err) return;
-        else if(!body) {
+    */
+    axios.get(url).then(({ data }) => {
+        if(!data) {
             interaction.reply('網路錯誤，請稍後再試!');
             return;
         }
-        const $ = cheerio.load(body);
+        const $ = cheerio.load(data);
         const currencyName = $(".hidden-phone.print_show");
         const cash = $(".rate-content-cash.text-right.print_hide");
         const sight = $(".rate-content-sight.text-right.print_hide");
