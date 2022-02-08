@@ -2,7 +2,7 @@
 
 ## Features
 ### Custom prefix
-* using animated emojis even without nitro
+* using animated emojis even without nitro (usage: :emoji-name:)
 * mute command
 * ping bonk command
 * add censor words
