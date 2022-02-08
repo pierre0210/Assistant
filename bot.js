@@ -61,6 +61,7 @@ client.on('messageCreate', async msg => {
     var blackListFile = await JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     const userTag = msg.author.tag;
 	const userID = msg.author.id;
+    const userNickname = msg.guild.members.cache.get(userID).nickname ? msg.guild.members.cache.get(userID).nickname : msg.author.username; 
 	const userAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=256`;
     const userLargeAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=1024`;
     var now = new Date();
@@ -114,15 +115,15 @@ client.on('messageCreate', async msg => {
                 }
             }
             if(!picMsg) return;
+            await msg.delete();
             let webhookch = client.channels.cache.get(curchannel);
             const webhooks = await webhookch.fetchWebhooks();
             const webhook = webhooks.first();
             await webhook.send({
                 content: picMsg,
-                username: userTag,
+                username: userNickname,
                 avatarURL: userAvatar
             });
-            await msg.delete();
         }
     }
 
