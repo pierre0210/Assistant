@@ -10,7 +10,7 @@ function timer(msg, userid, event, time) {
     }, time*1000)
 }
 
-async function run(interaction) {
+async function run(client, interaction) {
     const userName = interaction.user.username;
     const userID = interaction.user.id;
 

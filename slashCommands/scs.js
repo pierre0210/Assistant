@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const SC = require('./../modules/socialCreditScore/socialCredit.js');
 const util = require('./../modules/utility.js');
 
-async function run(interaction) {
+async function run(client, interaction) {
     if(interaction.options.getSubcommand() === 'stats') {
         const userID = interaction.user.id;
         const userName = interaction.user.username;

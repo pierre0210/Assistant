@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-async function run(interaction) {
+async function run(client, interaction) {
     const url = "https://rate.bot.com.tw/xrt?Lang=zh-TW";
     const amount = interaction.options.getNumber("amount");
     const currencyOption = interaction.options.getString("currency");

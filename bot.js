@@ -165,7 +165,7 @@ client.on("interactionCreate", async interaction => {
         if(cmd) {
             //console.log(cmd);
             try {
-                await cmd.run(interaction);
+                await cmd.run(client, interaction);
             } catch(error) {
                 console.log(error);
             }

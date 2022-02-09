@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
 require('dotenv').config();
 
-async function run(interaction) {
+async function run(client, interaction) {
     const countyName = interaction.options.getString('county');
     const apiUrl = `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${process.env.WEATHER_KEY}`;
     /*

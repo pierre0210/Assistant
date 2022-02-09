@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
-async function run(interaction) {
+async function run(client, interaction) {
     if(interaction.options.getSubcommand() === 'user') {
         const user = interaction.options.getUser('target');
         const infoEmbed = new MessageEmbed().setColor("#198964")
