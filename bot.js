@@ -150,7 +150,7 @@ client.on('messageCreate', async msg => {
             let newScore = score-count*scorePerCount;
             if(newScore <= 0) {
                 newScore = 0;
-                await msg.reply("**此人為共和國劣等公民!**");
+                await msg.reply("**此人為共和國劣等公民!\n處決日期：明天早上**");
             }
             await SC.editUserScore(userID, newScore);
         }
