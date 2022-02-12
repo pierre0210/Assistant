@@ -14,6 +14,7 @@
 * weather forecast command
 * social credit score system (meme)
 * foreign exchange command
+* embed message command
 
 ## Setup
 1. npm install
