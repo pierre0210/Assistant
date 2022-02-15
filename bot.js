@@ -69,6 +69,7 @@ client.on('messageCreate', async msg => {
     //const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
     const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
     const curchannel = msg.channel.id;
+    const hasMuteRole = muteRole.id ? msg.member.roles.cache.has(muteRole.id) : false;
 
     if(msg.content.startsWith(userPrefix) && (userID === configFile.botOwner || hasAdminPermission(msg))) {
         const args = msg.content.slice(userPrefix.length).split(' ');
@@ -80,11 +81,11 @@ client.on('messageCreate', async msg => {
         }
     }
 
-    else if((msg.member.roles.cache.has(muteRole.id) || blackListFile.members.includes(userID)) && userID != configFile.botOwner) {
+    else if((hasMuteRole || blackListFile.members.includes(userID)) && userID != configFile.botOwner) {
         msg.delete();
     }
 
-    else if(msg.content.endsWith("機率")) {
+    else if(msg.content.endsWith("機率") && configFile.probChannels.includes(curchannel)) {
         await msg.channel.send(`${util.getRandomNum(0, 100)}%`);
     }
 
@@ -92,7 +93,7 @@ client.on('messageCreate', async msg => {
         //console.log(msg.content);
         let emoji = msg.content;
         let picList = [];
-        if(configFile.channels.includes(curchannel)) {
+        if(configFile.emojiChannels.includes(curchannel)) {
             let startIndex = emoji.indexOf(":")+1
             let tmp = emoji.slice(startIndex);
             //console.log(emoji);
