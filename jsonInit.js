@@ -3,7 +3,8 @@ const fs = require('fs');
 const configjson = {
     "botOwner": "",
     "muteRole": "",
-    "channels": []
+    "emojiChannels": [],
+    "probChannels": []
 }
 const wordsjson = {
     "badWords": [],
