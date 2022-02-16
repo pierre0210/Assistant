@@ -4,7 +4,8 @@ const configjson = {
     "botOwner": "",
     "muteRole": "",
     "emojiChannels": [],
-    "probChannels": []
+    "probChannels": [],
+    "guildList": []
 }
 const wordsjson = {
     "badWords": [],

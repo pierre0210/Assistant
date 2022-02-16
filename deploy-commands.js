@@ -7,7 +7,7 @@ const guildID = process.env.GUILD_ID;
 const token = process.env.TOKEN;
 
 const commands = [];
-
+const configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 const slashCommandFiles = fs.readdirSync("./slashCommands/").filter(f => f.endsWith(".js"));
 for(const slash of slashCommandFiles) {
     let tmp = require(`./slashCommands/${slash}`);
@@ -16,12 +16,16 @@ for(const slash of slashCommandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(token);
 
-
-rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands })
-	.then(() => console.log('Successfully registered application commands.'))
-	.catch(console.error);
-
+for(let i=0; i<configFile.guildList.length; i++) {
+	rest.put(Routes.applicationGuildCommands(clientID, configFile.guildList[i]), { body: commands })
+		.then(() => console.log('Successfully registered application commands.'))
+		.catch(console.error);
+}
 /*
+rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands })
+		.then(() => console.log('Successfully registered application commands.'))
+		.catch(console.error);
+
 rest.put(Routes.applicationCommands(clientID), { body: commands })
 	.then(() => console.log('Successfully registered application commands.'))
 	.catch(console.error);
