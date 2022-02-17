@@ -120,11 +120,14 @@ client.on('messageCreate', async msg => {
             let webhookch = client.channels.cache.get(curchannel);
             const webhooks = await webhookch.fetchWebhooks();
             const webhook = webhooks.first();
-            await webhook.send({
-                content: picMsg,
-                username: userNickname,
-                avatarURL: userAvatar
-            });
+            if(!webhook) console.log("No webhook was found!");
+            else {
+                await webhook.send({
+                    content: picMsg,
+                    username: userNickname,
+                    avatarURL: userAvatar
+                });
+            }
         }
     }
 
