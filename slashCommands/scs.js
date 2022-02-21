@@ -2,8 +2,10 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const SC = require('./../modules/socialCreditScore/socialCredit.js');
 const util = require('./../modules/utility.js');
+const fs = require('fs');
 
 async function run(client, interaction) {
+    const configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
     if(interaction.options.getSubcommand() === 'stats') {
         const userID = interaction.user.id;
         const userName = interaction.user.username;
@@ -28,6 +30,40 @@ async function run(client, interaction) {
             await interaction.reply({ embeds:[infoEmbed] });
         }
     }
+    else if(interaction.options.getSubcommand() === 'add') {
+        if(interaction.user.id === configFile.botOwner) {
+            const user = interaction.options.getUser('target');
+            const score = interaction.options.getInteger('score');
+            if(await SC.isUserExists(user.id)) {
+                const info = await SC.getUser(user.id);
+                await SC.editUserScore(user.id, info.score+score);
+                await interaction.reply(`<@${user.id}> **+${score} social credit!**`);
+            }
+            else {
+                await interaction.reply({ content: "不存在此公民", emphemeral: true });
+            }
+        }
+        else {
+            await interaction.reply({ content: "你沒有權限使用此指令", emphemeral: true });
+        }
+    }
+    else if(interaction.options.getSubcommand() === 'minus') {
+        if(interaction.user.id === configFile.botOwner) {
+            const user = interaction.options.getUser('target');
+            const score = interaction.options.getInteger('score');
+            if(await SC.isUserExists(user.id)) {
+                const info = await SC.getUser(user.id);
+                await SC.editUserScore(user.id, info.score-score);
+                await interaction.reply(`<@${user.id}> **-${score} social credit!**`);
+            }
+            else {
+                await interaction.reply({ content: "不存在此公民", emphemeral: true });
+            }
+        }
+        else {
+            await interaction.reply({ content: "你沒有權限使用此指令", emphemeral: true });
+        }
+    }
 }
 
 module.exports.data = new SlashCommandBuilder()
@@ -35,10 +71,20 @@ module.exports.data = new SlashCommandBuilder()
     .setDescription('Social credit score system')
     .addSubcommand(sub => sub
         .setName('stats')
-        .setDescription('check your current social credit score (蒼主席的點子不甘我的事)'))
+        .setDescription('check your current social credit score'))
     .addSubcommand(sub => sub
         .setName('user')
-        .setDescription('social credit score of a user (蒼主席的點子不甘我的事)')
-        .addUserOption(option => option.setName('target').setDescription('target user').setRequired(true)));
+        .setDescription('social credit score of a user')
+        .addUserOption(option => option.setName('target').setDescription('target user').setRequired(true)))
+    .addSubcommand(sub => sub
+        .setName('add')
+        .setDescription('add social credit score (admin only)')
+        .addUserOption(option => option.setName('target').setDescription('target user').setRequired(true))
+        .addIntegerOption(option => option.setName('score').setDescription('social credit score').setRequired(true)))
+    .addSubcommand(sub => sub
+        .setName('minus')
+        .setDescription('minus social credit score (admin only)')
+        .addUserOption(option => option.setName('target').setDescription('target user').setRequired(true))
+        .addIntegerOption(option => option.setName('score').setDescription('social credit score').setRequired(true)));
 
 module.exports.run = run;
