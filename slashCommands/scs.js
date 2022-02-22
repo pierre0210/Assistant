@@ -40,11 +40,11 @@ async function run(client, interaction) {
                 await interaction.reply(`<@${user.id}> **+${score} social credit!**`);
             }
             else {
-                await interaction.reply({ content: "不存在此公民", emphemeral: true });
+                await interaction.reply({ content: "不存在此公民", ephemeral: true });
             }
         }
         else {
-            await interaction.reply({ content: "你沒有權限使用此指令", emphemeral: true });
+            await interaction.reply({ content: "你沒有權限使用此指令", ephemeral: true });
         }
     }
     else if(interaction.options.getSubcommand() === 'minus') {
@@ -57,11 +57,11 @@ async function run(client, interaction) {
                 await interaction.reply(`<@${user.id}> **-${score} social credit!**`);
             }
             else {
-                await interaction.reply({ content: "不存在此公民", emphemeral: true });
+                await interaction.reply({ content: "不存在此公民", ephemeral: true });
             }
         }
         else {
-            await interaction.reply({ content: "你沒有權限使用此指令", emphemeral: true });
+            await interaction.reply({ content: "你沒有權限使用此指令", ephemeral: true });
         }
     }
 }
