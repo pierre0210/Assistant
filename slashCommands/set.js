@@ -13,65 +13,70 @@ function isInList(list, element) {
 }
 
 async function run(client, interaction) {
-    if(interaction.options.getSubcommand() === 'aec') {
-        const channelID = interaction.options.getString('channel');
-        if(!isInList(configFile.emojiChannels, channelID)) {
-            configFile.emojiChannels.push(channelID);
-            fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
-                if(err) console.log(err);
-            });
-            await interaction.reply({ content: "加入頻道", ephemeral: true });
-        }
-        else {
-            await interaction.reply({ content: "頻道已設定", ephemeral: true });
-        }
-    }
-    else if(interaction.options.getSubcommand() === 'rec') {
-        const channelID = interaction.options.getString('channel');
-        if(isInList(configFile.emojiChannels, channelID)) {
-            for(let i=0; i<configFile.emojiChannels.length; i++) {
-                if(configFile.emojiChannels[i] === channelID) {
-                    configFile.emojiChannels.splice(i, 1);
-                }
+    if(interaction.user.id === configFile.botOwner) {
+        if(interaction.options.getSubcommand() === 'aec') {
+            const channelID = interaction.options.getString('channel');
+            if(!isInList(configFile.emojiChannels, channelID)) {
+                configFile.emojiChannels.push(channelID);
+                fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
+                    if(err) console.log(err);
+                });
+                await interaction.reply({ content: "加入頻道", ephemeral: true });
             }
-            fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
-                if(err) console.log(err);
-            });
-            await interaction.reply({ content: "刪除頻道", ephemeral: true });
-        }
-        else {
-            await interaction.reply({ content: "頻道未設定", ephemeral: true });
-        }
-    }
-    else if(interaction.options.getSubcommand() === 'acc') {
-        const channelID = interaction.options.getString('channel');
-        if(!isInList(configFile.probChannels, channelID)) {
-            configFile.probChannels.push(channelID);
-            fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
-                if(err) console.log(err);
-            });
-            await interaction.reply({ content: "加入頻道", ephemeral: true });
-        }
-        else {
-            await interaction.reply({ content: "頻道已設定", ephemeral: true });
-        }
-    }
-    else if(interaction.options.getSubcommand() === 'rcc') {
-        const channelID = interaction.options.getString('channel');
-        if(isInList(configFile.probChannels, channelID)) {
-            for(let i=0; i<configFile.probChannels.length; i++) {
-                if(configFile.probChannels[i] === channelID) {
-                    configFile.probChannels.splice(i, 1);
-                }
+            else {
+                await interaction.reply({ content: "頻道已設定", ephemeral: true });
             }
-            fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
-                if(err) console.log(err);
-            });
-            await interaction.reply({ content: "刪除頻道", ephemeral: true });
         }
-        else {
-            await interaction.reply({ content: "頻道未設定", ephemeral: true });
+        else if(interaction.options.getSubcommand() === 'rec') {
+            const channelID = interaction.options.getString('channel');
+            if(isInList(configFile.emojiChannels, channelID)) {
+                for(let i=0; i<configFile.emojiChannels.length; i++) {
+                    if(configFile.emojiChannels[i] === channelID) {
+                        configFile.emojiChannels.splice(i, 1);
+                    }
+                }
+                fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
+                    if(err) console.log(err);
+                });
+                await interaction.reply({ content: "刪除頻道", ephemeral: true });
+            }
+            else {
+                await interaction.reply({ content: "頻道未設定", ephemeral: true });
+            }
         }
+        else if(interaction.options.getSubcommand() === 'acc') {
+            const channelID = interaction.options.getString('channel');
+            if(!isInList(configFile.probChannels, channelID)) {
+                configFile.probChannels.push(channelID);
+                fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
+                    if(err) console.log(err);
+                });
+                await interaction.reply({ content: "加入頻道", ephemeral: true });
+            }
+            else {
+                await interaction.reply({ content: "頻道已設定", ephemeral: true });
+            }
+        }
+        else if(interaction.options.getSubcommand() === 'rcc') {
+            const channelID = interaction.options.getString('channel');
+            if(isInList(configFile.probChannels, channelID)) {
+                for(let i=0; i<configFile.probChannels.length; i++) {
+                    if(configFile.probChannels[i] === channelID) {
+                        configFile.probChannels.splice(i, 1);
+                    }
+                }
+                fs.writeFileSync('./../config.json', JSON.stringify(configFile), (err) => {
+                    if(err) console.log(err);
+                });
+                await interaction.reply({ content: "刪除頻道", ephemeral: true });
+            }
+            else {
+                await interaction.reply({ content: "頻道未設定", ephemeral: true });
+            }
+        }
+    }
+    else {
+        await interaction.reply({ content: "你沒有權限使用此指令", ephemeral: true });
     }
 }
 
@@ -80,19 +85,19 @@ module.exports.data = new SlashCommandBuilder()
     .setDescription('Server settings')
     .addSubcommand(sub => sub
         .setName('aec')
-        .setDescription('add emoji channel')
+        .setDescription('add emoji channel (admin only)')
         .addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('rec')
-        .setDescription('remove emoji channel')
+        .setDescription('remove emoji channel (admin only)')
         .addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('acc')
-        .setDescription('add chance keyword channel')
+        .setDescription('add chance keyword channel (admin only)')
         .addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('rcc')
-        .setDescription('remove chance keyword channel')
+        .setDescription('remove chance keyword channel (admin only)')
         .addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)));
 
 module.exports.run = run;
