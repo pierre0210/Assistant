@@ -15,7 +15,8 @@ async function run(client, interaction) {
             var obj = {
                 title: title,
                 min: minNum,
-                max: maxNum
+                max: maxNum,
+                voterList: []
             };
             for(let op of options) {
                 obj[op] = {

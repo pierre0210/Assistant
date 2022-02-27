@@ -1,9 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
-var logFile = JSON.parse(fs.readFileSync('./log.json', 'utf-8'));
+
 
 async function run(client, interaction) {
+    var logFile = JSON.parse(fs.readFileSync('./log.json', 'utf-8'));
     const optionList = interaction.options.getString('options').split(" ");
     //console.log(optionList);
     if(!logFile.poll[interaction.guild.id]) {
@@ -30,18 +31,25 @@ async function run(client, interaction) {
             }
         }
         if(valid) {
-            for(let option of optionList) {
-                //console.log(option);
-                //console.log(logFile.poll[interaction.guild.id][option]);
-                if(!sameList.includes(option) && logFile.poll[interaction.guild.id][option]) {
-                    logFile.poll[interaction.guild.id][option].score++;
-                    logFile.poll[interaction.guild.id][option].memberList.push(interaction.user.tag);
-                }
+            if(logFile.poll[interaction.guild.id].voterList.includes(interaction.user.id)) {
+                await interaction.reply({ content: "不可重複投票", ephemeral: true });
             }
-            fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
-                if(err) console.log(err);
-            });
-            await interaction.reply({ content: "完成", ephemeral: true });
+            else {
+                for(let option of optionList) {
+                    //console.log(option);
+                    //console.log(logFile.poll[interaction.guild.id][option]);
+                    if(!sameList.includes(option) && logFile.poll[interaction.guild.id][option]) {
+                        logFile.poll[interaction.guild.id][option].score++;
+                        logFile.poll[interaction.guild.id][option].memberList.push(interaction.user.tag);
+                    }
+                }
+                logFile.poll[interaction.guild.id].voterList.push(interaction.user.id);
+                fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
+                    if(err) console.log(err);
+                });
+
+                await interaction.reply({ content: "完成", ephemeral: true });
+            }
         }
         else {
             await interaction.reply({ content: "選項不存在", ephemeral: true });
