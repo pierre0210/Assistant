@@ -15,6 +15,7 @@ async function run(client, interaction) {
     else {
         const findSameElement = arr => arr.filter((element, index) => arr.indexOf(element) != index);
         const sameList = findSameElement(optionList);
+        var valid = true;
         //console.log(sameList);
         for(let option of sameList) {
             //console.log(":1");
@@ -24,17 +25,27 @@ async function run(client, interaction) {
             }
         }
         for(let option of optionList) {
-            //console.log(option);
-            //console.log(logFile.poll[interaction.guild.id][option]);
-            if(!sameList.includes(option)) {
-                logFile.poll[interaction.guild.id][option].score++;
-                logFile.poll[interaction.guild.id][option].memberList.push(interaction.user.tag);
+            if(!logFile.poll[interaction.guild.id][option]) {
+                valid = false;
             }
         }
-        fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
-            if(err) console.log(err);
-        });
-        await interaction.reply({ content: "完成", ephemeral: true });
+        if(valid) {
+            for(let option of optionList) {
+                //console.log(option);
+                //console.log(logFile.poll[interaction.guild.id][option]);
+                if(!sameList.includes(option) && logFile.poll[interaction.guild.id][option]) {
+                    logFile.poll[interaction.guild.id][option].score++;
+                    logFile.poll[interaction.guild.id][option].memberList.push(interaction.user.tag);
+                }
+            }
+            fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
+                if(err) console.log(err);
+            });
+            await interaction.reply({ content: "完成", ephemeral: true });
+        }
+        else {
+            await interaction.reply({ content: "選項不存在", ephemeral: true });
+        }
     }
 }
 
