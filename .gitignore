@@ -4,3 +4,4 @@ database.sqlite
 modules/socialCreditScore/words.json
 config.json
 blackList.json
+log.json

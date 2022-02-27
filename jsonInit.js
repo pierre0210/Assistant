@@ -5,7 +5,8 @@ const configjson = {
     "muteRole": "",
     "emojiChannels": [],
     "probChannels": [],
-    "guildList": []
+    "guildList": [],
+    "nationList": []
 }
 const wordsjson = {
     "badWords": [],
@@ -13,6 +14,9 @@ const wordsjson = {
 }
 const blacklistjson = {
     "members": []
+}
+const logjson = {
+    "poll": []
 }
 
 fs.writeFileSync('config.json', JSON.stringify(configjson, null, 4), function(err) {
@@ -28,4 +32,9 @@ fs.writeFileSync('./modules/socialCreditScore/words.json', JSON.stringify(wordsj
 fs.writeFileSync('blackList.json', JSON.stringify(blacklistjson, null, 4), function(err) {
     if(err) console.log(err);
     console.log("blackList.json created!");
+});
+
+fs.writeFileSync('log.json', JSON.stringify(logjson, null, 4), function(err) {
+    if(err) console.log(err);
+    console.log("log.json created!");
 });

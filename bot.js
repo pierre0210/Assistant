@@ -131,7 +131,7 @@ client.on('messageCreate', async msg => {
         }
     }
 
-    else {
+    else if(configFile.nationList.includes(msg.guild.id)) {
         let count = 0;
         const scorePerCount = 100;
         for(const word of wordsFile.badWords) {
