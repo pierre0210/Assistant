@@ -18,7 +18,7 @@ async function run(client, interaction) {
             const channelID = interaction.options.getString('channel');
             if(!isInList(configFile.emojiChannels, channelID)) {
                 configFile.emojiChannels.push(channelID);
-                fs.writeFileSync('./config.json', JSON.stringify(configFile), (err) => {
+                fs.writeFileSync('./config.json', JSON.stringify(configFile, null, 4), (err) => {
                     if(err) console.log(err);
                 });
                 await interaction.reply({ content: "加入頻道", ephemeral: true });
@@ -35,7 +35,7 @@ async function run(client, interaction) {
                         configFile.emojiChannels.splice(i, 1);
                     }
                 }
-                fs.writeFileSync('./config.json', JSON.stringify(configFile), (err) => {
+                fs.writeFileSync('./config.json', JSON.stringify(configFile, null, 4), (err) => {
                     if(err) console.log(err);
                 });
                 await interaction.reply({ content: "刪除頻道", ephemeral: true });
@@ -48,7 +48,7 @@ async function run(client, interaction) {
             const channelID = interaction.options.getString('channel');
             if(!isInList(configFile.probChannels, channelID)) {
                 configFile.probChannels.push(channelID);
-                fs.writeFileSync('./config.json', JSON.stringify(configFile), (err) => {
+                fs.writeFileSync('./config.json', JSON.stringify(configFile, null, 4), (err) => {
                     if(err) console.log(err);
                 });
                 await interaction.reply({ content: "加入頻道", ephemeral: true });
@@ -65,7 +65,7 @@ async function run(client, interaction) {
                         configFile.probChannels.splice(i, 1);
                     }
                 }
-                fs.writeFileSync('./config.json', JSON.stringify(configFile), (err) => {
+                fs.writeFileSync('./config.json', JSON.stringify(configFile, null, 4), (err) => {
                     if(err) console.log(err);
                 });
                 await interaction.reply({ content: "刪除頻道", ephemeral: true });
