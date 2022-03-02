@@ -15,6 +15,7 @@
 * social credit score system (meme)
 * foreign exchange command
 * embed message command
+* vote & poll command (user friendly)
 
 ## Setup
 1. npm install
