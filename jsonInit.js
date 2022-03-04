@@ -16,7 +16,8 @@ const blacklistjson = {
     "members": []
 }
 const logjson = {
-    "poll": {}
+    "poll": {},
+    "reddit": {}
 }
 
 fs.writeFileSync('config.json', JSON.stringify(configjson, null, 4), function(err) {

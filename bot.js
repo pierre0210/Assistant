@@ -4,6 +4,7 @@ const fs = require('fs');
 const { start } = require('repl');
 const util = require('./modules/utility.js');
 const SC = require('./modules/socialCreditScore/socialCredit.js');
+const RP = require('./modules/redditRss/redditPost.js');
 require('dotenv').config();
 const token = process.env.TOKEN;
 const userPrefix = "->";
@@ -46,6 +47,9 @@ client.once('ready', () => {
     fs.writeFileSync("./blackList.json", JSON.stringify(blackListFile), (err) => {
         if(err) console.log(err);
     });
+
+    const redditPost = new RP.redditPost(client);
+    redditPost.run();
     console.log('\nLogged in as %s !', client.user.tag);
 });
 
