@@ -49,9 +49,11 @@ client.once('ready', () => {
     });
 
     const redditPost = new RP.redditPost(client);
+    redditPost.run();
     setInterval(() => {
-        redditPost.run()
+        redditPost.run();
     }, 5*60*1000);
+
     console.log('\nLogged in as %s !', client.user.tag);
 });
 
