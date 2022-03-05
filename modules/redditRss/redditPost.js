@@ -1,15 +1,16 @@
 const Parser = require('rss-parser');
+const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const parser = new Parser();
 
 class redditPost {
     constructor(client) {
         this.client = client;
-        this.url = 'https://www.reddit.com/';
+        this.url = 'https://www.reddit.com';
     }
 
     getSubreddit(id) {
-        return this.url+'r/'+id+'/.rss';
+        return this.url+'/r/'+id+'/.rss';
     }
 
     async run() {
@@ -18,25 +19,41 @@ class redditPost {
             const temp = item.temp;
             let newPostList = [];
             let feed = await parser.parseURL(this.getSubreddit(key));
-            for(let item of feed.items) {
-                let isNewItem = true;
-                for(let tmp of temp.items) {
-                    if(item.id === tmp.id) {
-                        isNewItem = false;
-                    }
-                }
-                if(isNewItem) {
+            if(!temp.items) {
+                for(let item of feed.items) {
                     newPostList.push(item);
                 }
             }
-            for(let channel of logFile.reddit[key].channels) {
-                await this.client.channels.cache.get(channel).send()
+            else {
+                for(let item of feed.items) {
+                    let isNewItem = true;
+                    for(let tmp of temp.items) {
+                        if(item.id === tmp.id) {
+                            isNewItem = false;
+                        }
+                    }
+                    if(isNewItem) {
+                        newPostList.push(item);
+                    }
+                }
+                for(let channel of logFile.reddit[key].channels) {
+                    for(let post of newPostList) {
+                        let timestamp = new Date(post.pubDate);
+                        let message = new MessageEmbed().setColor('#00FF00')
+                            .setTitle(post.title)
+                            .addField('Subreddit:', `[/r/${key}](${this.url}/r/${key})`, true)
+                            .addField('作者:', `[${post.author}](${this.url+post.author})`, true)
+                            .addField('貼文:', `[貼文連結](${post.link})`, true)
+                            .addField('發布時間:', timestamp.toString())
+                        await this.client.channels.cache.get(channel).send({ embeds: [message] });
+                    }
+                }
             }
+            
             logFile.reddit[key].temp = feed;
             fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
                 if(err) console.log(err);
             });
-            console.log(feed);
         }
     }
 }
