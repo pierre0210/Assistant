@@ -8,6 +8,7 @@ class redditPost {
     constructor(client) {
         this.client = client;
         this.url = 'https://www.reddit.com';
+        this.maxTempPost = 100;
     }
 
     getSubreddit(id) {
@@ -56,8 +57,18 @@ class redditPost {
                     }
                 }
             }
-            
-            logFile.reddit[key].temp = feed;
+            if(!temp.items) {
+                //console.log(":1");
+                logFile.reddit[key].temp = feed;
+            }
+            else if(logFile.reddit[key].temp.items.length > this.maxTempPost) {
+                //console.log(":2");
+                logFile.reddit[key].temp = feed;
+            }
+            else {
+                //console.log(":3");
+                logFile.reddit[key].temp.items = logFile.reddit[key].temp.items.concat(newPostList);
+            }
             fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
                 if(err) console.log(err);
             });
