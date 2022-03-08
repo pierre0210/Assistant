@@ -2,7 +2,6 @@
 
 ## Features
 ### Custom prefix
-* using animated emojis even without nitro (usage: :emoji-name:)
 * mute command
 * ping bonk command
 * add censor words
@@ -16,6 +15,10 @@
 * foreign exchange command
 * embed message command
 * vote & poll command (user friendly)
+
+## Other features
+* using animated emojis even without nitro (usage: :emoji-name:)
+* reddit top post notification (testing)
 
 ## Setup
 1. npm install
