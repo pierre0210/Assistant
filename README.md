@@ -15,8 +15,9 @@
 * foreign exchange command
 * embed message command
 * vote & poll command (user friendly)
+* setting command for emoji, reddit post(half done) channel and keyword triggers
 
-## Other features
+### Other features
 * using animated emojis even without nitro (usage: :emoji-name:)
 * reddit top post notification (testing)
 
