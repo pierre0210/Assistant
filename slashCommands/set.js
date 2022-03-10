@@ -114,7 +114,7 @@ async function run(client, interaction) {
                 fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
                     if(err) console.log(err);
                 });
-                await interaction.reply({ content: `${subreddit}已刪除`, ephemeral: true });
+                await interaction.reply({ content: `${subreddit}已加入`, ephemeral: true });
             }
         }
         else if(interaction.options.getSubcommand() === 'drc') {
