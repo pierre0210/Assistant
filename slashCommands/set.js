@@ -13,7 +13,7 @@ function isInList(list, element) {
 
 async function run(client, interaction) {
     var configFile = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
-    var logFile = JSON.parse(fs.readFileSync('./logFile.json', 'utf-8'));
+    var logFile = JSON.parse(fs.readFileSync('./log.json', 'utf-8'));
     if(interaction.user.id === configFile.botOwner) {
         if(interaction.options.getSubcommand() === 'aec') {
             const channelID = interaction.options.getString('channel');
