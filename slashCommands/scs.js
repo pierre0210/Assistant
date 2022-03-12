@@ -6,7 +6,10 @@ const fs = require('fs');
 
 async function run(client, interaction) {
     const configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
-    if(interaction.options.getSubcommand() === 'stats') {
+    if(!configFile.nationList.includes(interaction.guild.id)) {
+        await interaction.reply("此處並非共和國領土");
+    }
+    else if(interaction.options.getSubcommand() === 'stats') {
         const userID = interaction.user.id;
         const userName = interaction.user.username;
         if(!await SC.isUserExists(userID)) {
