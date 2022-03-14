@@ -8,17 +8,17 @@
 
 ### Slash command
 * info user & server
-* reminder command
+* reminder command (switching to database system)
 * air quality index command
 * weather forecast command
 * social credit score system (meme)
 * foreign exchange command
 * embed message command
 * vote & poll command (user friendly)
-* setting command for emoji, reddit post(half done) channel and keyword triggers
+* setting command for emoji, reddit post channel and keyword triggers
 
 ### Other features
-* using animated emojis even without nitro (usage: :emoji-name:)
+* for no-nitro user to use animated emojis (format: :emoji-name:)
 * reddit top post notification (testing)
 
 ## Setup
