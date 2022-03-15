@@ -1,4 +1,4 @@
-const mute = require('./../modules/mute.js');
+const mute = require('./../modules/admin/mute.js');
 
 module.exports.run = async (client, msg, userTag, userID, args) => {
     if(args.length === 2 && !isNaN(parseInt(args[1]))) {

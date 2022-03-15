@@ -1,4 +1,4 @@
-const troll = require('./../modules/troll.js');
+const troll = require('./../modules/admin/troll.js');
 
 module.exports.run = async (client, msg, userTag, userID, args) => {
     if(args.length === 2 && !isNaN(parseInt(args[1]))) {
