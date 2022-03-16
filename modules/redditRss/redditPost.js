@@ -45,11 +45,11 @@ class redditPost {
                         //console.log(imageUrl);
                         let title = post.title;
                         if(post.title.length > 256) {
-                            title = post.title.substring(0, 250)+'...'
+                            title = post.title.substring(0, 200)+'...';
                         }
                         let timestamp = new Date(post.pubDate);
                         let message = new MessageEmbed().setColor('#00FF00')
-                            .setTitle(post.title)
+                            .setTitle(title)
                             .addField('Subreddit:', `[/r/${key}](${this.url}/r/${key})`, true)
                             .addField('作者:', `[${post.author}](${this.url+post.author})`, true)
                             .addField('貼文:', `[貼文連結](${post.link})`, true)
