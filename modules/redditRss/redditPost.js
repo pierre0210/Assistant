@@ -43,6 +43,10 @@ class redditPost {
                         const $ = cheerio.load(post.content);
                         const imageUrl = $('span')[0].children[0].attribs.href;
                         //console.log(imageUrl);
+                        let title = post.title;
+                        if(post.title.length > 256) {
+                            title = post.title.substring(0, 250)+'...'
+                        }
                         let timestamp = new Date(post.pubDate);
                         let message = new MessageEmbed().setColor('#00FF00')
                             .setTitle(post.title)
