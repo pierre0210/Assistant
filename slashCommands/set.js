@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 const fs = require('fs');
 
 function isInList(list, element) {
@@ -14,7 +14,7 @@ function isInList(list, element) {
 async function run(client, interaction) {
     var configFile = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
     var logFile = JSON.parse(fs.readFileSync('./log.json', 'utf-8'));
-    if(interaction.user.id === configFile.botOwner) {
+    if(interaction.user.id === configFile.botOwner || interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
         if(interaction.options.getSubcommand() === 'aec') {
             const channelID = interaction.options.getString('channel');
             if(!isInList(configFile.emojiChannels, channelID)) {
@@ -163,19 +163,19 @@ module.exports.data = new SlashCommandBuilder()
         .addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('asn')
-        .setDescription('add subreddit notification')
+        .setDescription('add subreddit notification (admin only)')
         .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('dsn')
-        .setDescription('delete subreddit notification')
+        .setDescription('delete subreddit notification (admin only)')
         .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('arc')
-        .setDescription('add reddit channel')
+        .setDescription('add reddit channel (admin only)')
         .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('drc')
-        .setDescription('delete reddit channel')
+        .setDescription('delete reddit channel (admin only)')
         .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)));
 
 module.exports.run = run;
