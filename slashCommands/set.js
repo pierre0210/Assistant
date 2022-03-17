@@ -172,10 +172,10 @@ module.exports.data = new SlashCommandBuilder()
     .addSubcommand(sub => sub
         .setName('arc')
         .setDescription('add reddit channel (admin only)')
-        .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)))
+        .addStringOption(option => option.setName('channel').setDescription('subreddit name').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('drc')
         .setDescription('delete reddit channel (admin only)')
-        .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)));
+        .addStringOption(option => option.setName('channel').setDescription('subreddit name').setRequired(true)));
 
 module.exports.run = run;
