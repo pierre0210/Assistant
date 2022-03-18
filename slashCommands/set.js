@@ -116,7 +116,7 @@ async function run(client, interaction) {
                 fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
                     if(err) console.log(err);
                 });
-                await interaction.reply({ content: `${subreddit}已加入`, ephemeral: true });
+                await interaction.reply({ content: `頻道已加入`, ephemeral: true });
             }
         }
         else if(interaction.options.getSubcommand() === 'drc') {
@@ -133,7 +133,7 @@ async function run(client, interaction) {
                 fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
                     if(err) console.log(err);
                 });
-                await interaction.reply({ content: `${subreddit}已刪除`, ephemeral: true });
+                await interaction.reply({ content: `頻道已刪除`, ephemeral: true });
             }
         }
     }
@@ -172,10 +172,10 @@ module.exports.data = new SlashCommandBuilder()
     .addSubcommand(sub => sub
         .setName('arc')
         .setDescription('add reddit channel (admin only)')
-        .addStringOption(option => option.setName('channel').setDescription('subreddit name').setRequired(true)))
+        .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)))
     .addSubcommand(sub => sub
         .setName('drc')
         .setDescription('delete reddit channel (admin only)')
-        .addStringOption(option => option.setName('channel').setDescription('subreddit name').setRequired(true)));
+        .addStringOption(option => option.setName('subreddit').setDescription('subreddit name').setRequired(true)));
 
 module.exports.run = run;
