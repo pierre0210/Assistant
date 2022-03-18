@@ -1,15 +1,17 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, Client, Intents } = require('discord.js');
+const RT = require('./../modules/reminder/reminderTimer.js');
 
+/*
 function timer(msg, userid, event, time) {
     setTimeout(() => {
         const infoEmbed = new MessageEmbed().setColor("#198964")
             .setTitle(`${event}`);
         //console.log(msg);
         msg.channel.send({ content: "<@"+userid+">", embeds: [infoEmbed]});
-    }, time*1000)
+    }, time*1000);
 }
-
+*/
 async function run(client, interaction) {
     const userName = interaction.user.username;
     const userID = interaction.user.id;
@@ -47,7 +49,7 @@ async function run(client, interaction) {
             .setDescription(`Remind **${userName}** about **${eventMsg}** in **${timeStr}**`);
         await interaction.reply({ embeds:[infoEmbed] });
         const message = await interaction.fetchReply();
-        timer(message, userID, eventMsg, total);
+        RT.timer(client, interaction.channel.id, userID, eventMsg, total);
     }
     else {
         const infoEmbed = new MessageEmbed().setColor("#198964")
