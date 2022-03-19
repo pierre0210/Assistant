@@ -110,7 +110,7 @@ async function run(client, interaction) {
                 await interaction.reply({ content: "Subreddit不存在", ephemeral: true });
             }
             else {
-                if(logFile.reddit[subreddit].channels.includes(interaction.channel.id)) {
+                if(!logFile.reddit[subreddit].channels.includes(interaction.channel.id)) {
                     logFile.reddit[subreddit].channels.push(interaction.channel.id);
                 }
                 fs.writeFileSync('./log.json', JSON.stringify(logFile, null, 4), (err) => {
