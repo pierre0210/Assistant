@@ -7,8 +7,8 @@ function createListeningStream(receiver, user) {
 	//console.log(user.id);
     const opusStream = receiver.subscribe(user.id, {
 		end: {
-			behavior: EndBehaviorType.AfterInactivity,
-			duration: 1000,
+			behavior: EndBehaviorType.Manual,
+			duration: 1000, //for slience and inactivate mode
 		}
 	});
 
@@ -17,7 +17,7 @@ function createListeningStream(receiver, user) {
     const oggStream = new prism.opus.OggLogicalBitstream({
 		opusHead: new prism.opus.OpusHead({
 			channelCount: 1,
-			sampleRate: 48000,
+			sampleRate: 48000, 
 		}),
 		pageSizeControl: {
 			maxPackets: 1000,
@@ -31,7 +31,8 @@ function createListeningStream(receiver, user) {
 		//console.log(':in');
 		if (err) {
 			console.log(err);
-		} else {
+		} 
+		else {
 			console.log(`Recorded ${filename}`);
 		}
 	});

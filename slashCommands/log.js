@@ -9,6 +9,10 @@ async function run(client, interaction) {
     var configFile = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
     if(interaction.user.id === configFile.botOwner || interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
         if(interaction.options.getSubcommand() === 'audio') {
+            if(client.voiceConn) {
+                await interaction.reply('已有監聽進行中');
+                return;
+            }
             await interaction.deferReply();
             const channel = interaction.options.getString('channel');
             const user = interaction.options.getUser('user');
@@ -19,6 +23,8 @@ async function run(client, interaction) {
                 selfMute: false,
                 adapterCreator: interaction.member.voice.channel.guild.voiceAdapterCreator,
             });
+            client.voiceConn = connection;
+            client.logChannel = channel;
             await entersState(connection, VoiceConnectionStatus.Ready, 20e3);
             //console.log(new Voice.SpeakingMap().users);
             /*
@@ -27,11 +33,24 @@ async function run(client, interaction) {
             }
             */
             //new VoiceReceiver().subscribe()
-            connection.receiver.speaking.on('start', (userid) => {
+            connection.receiver.speaking.once('start', (userid) => {
                 createListeningStream(connection.receiver, user);
             });
             
-            await interaction.followUp({ content: `Listening to ${channel}`, ephemeral: true });
+            await interaction.followUp({ content: `監聽 <#${channel}> 中` });
+        }
+        else if(interaction.options.getSubcommand() === 'leave') {
+            if(client.voiceConn) {
+                await interaction.deferReply();
+                await client.voiceConn.destroy();
+                //client.voiceConn.on('error', () => {});
+                await interaction.followUp(`停止監聽 <#${client.logChannel}>`);
+                delete client.voiceConn;
+                delete client.logChannel;
+            }
+            else {
+                await interaction.reply("沒有監聽進行中");
+            }
         }
     }
     else {
@@ -46,6 +65,9 @@ module.exports.data = new SlashCommandBuilder()
         .setName('audio')
         .setDescription('save conversation (admin only)')
         .addStringOption(option => option.setName('channel').setDescription('target channel').setRequired(true))
-        .addUserOption(option => option.setName('user').setDescription('target user').setRequired(true)));
+        .addUserOption(option => option.setName('user').setDescription('target user').setRequired(true)))
+    .addSubcommand(sub => sub
+        .setName('leave')
+        .setDescription('disconnect from voice channel'));
 
 module.exports.run = run;
