@@ -16,13 +16,14 @@
 * embed message command
 * vote & poll command (user friendly)
 * setting command for emoji, reddit post channel and keyword triggers
+* voice chat logging
 
 ### Other features
 * for no-nitro user to use animated emojis (format: :emoji-name:)
 * reddit top post notification (testing)
 
 ## Setup
-1. npm install
+1. npm install (linux user may need to run `sudo apt-get install build-essential`)
 2. run dbInit.js and jsonInit.js
 3. setup mute role and put role name in config.json
 4. add bot owner id to config.json

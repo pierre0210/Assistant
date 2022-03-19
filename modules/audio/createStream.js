@@ -12,7 +12,7 @@ function createListeningStream(receiver, user) {
 		}
 	});
 
-	console.log(opusStream);
+	//console.log(opusStream);
 
     const oggStream = new prism.opus.OggLogicalBitstream({
 		opusHead: new prism.opus.OpusHead({
