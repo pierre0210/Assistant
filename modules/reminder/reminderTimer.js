@@ -17,12 +17,34 @@ function timer(client, channelID, userid, event, time) {
     }, time*1000);
 }
 
-function addTask(userID) {
-    
+async function checkTask(userID) {
+    return await task.findOne({ where: { user_id: userID } }) ? true : false;
 }
 
-function dropTask(userID) {
+async function addTask(userID, time, event, channelID) {
+    let isUserExist = await checkTask(userID);
+    if(!isUserExist) return false;
+    await task.create({
+        user_id: userID,
+        time: time + Date.now(),
+        event: event,
+        channel_id: channelID
+    });
+    return true;
+}
+
+async function dropTask(userID) {
+    let isUserExist = await checkTask(userID);
+    if(!isUserExist) return false;
+    await task.destroy({ where: { user_id: userID } });
+    return true;
+}
+
+async function setTimerForAll() {
+    const taskList = await task.findAll({ attributes: ['user_id', 'time', 'event', 'channel_id'] });
 
 }
 
 module.exports.timer = timer;
+module.exports.addTask = addTask;
+module.exports.dropTask = dropTask;
