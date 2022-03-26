@@ -3,8 +3,9 @@ const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const { start } = require('repl');
 const util = require('./modules/utility.js');
-const SC = require('./modules/socialCreditScore/socialCredit.js');
+const WD = require('./modules/socialCreditScore/wordsDectect.js');
 const RP = require('./modules/redditRss/redditPost.js');
+const emoji = require('./modules/emoji/emoji.js')
 require('dotenv').config();
 const token = process.env.TOKEN;
 const userPrefix = "->";
@@ -98,74 +99,11 @@ client.on('messageCreate', async msg => {
     }
 
     else if(msg.content.startsWith(":") && msg.content.endsWith(":")) { 
-        //console.log(msg.content);
-        let emoji = msg.content;
-        let picList = [];
-        if(configFile.emojiChannels.includes(curchannel)) {
-            let startIndex = emoji.indexOf(":")+1
-            let tmp = emoji.slice(startIndex);
-            //console.log(emoji);
-            while(tmp.indexOf(":") != -1) {
-                let endIndex = tmp.indexOf(":");
-                emoji = tmp.slice(0, endIndex);
-                tmp = tmp.slice(endIndex+1);
-                let pic = client.emojis.cache.find(e => e.name === emoji);
-                if(pic) {
-                    picList.push({ "id": pic.id, "name": pic.name, "animated": pic.animated });
-                }
-            }
-            let picMsg = "";
-            for(let i=0; i<picList.length; i++) {
-                if(picList[i].animated) {
-                    picMsg += "<a:"+picList[i].name+":"+picList[i].id+">";
-                }
-                else {
-                    picMsg += "<:"+picList[i].name+":"+picList[i].id+">";
-                }
-            }
-            if(!picMsg) return;
-            await msg.delete();
-            let webhookch = client.channels.cache.get(curchannel);
-            const webhooks = await webhookch.fetchWebhooks();
-            const webhook = webhooks.first();
-            if(!webhook) console.log("No webhook was found!");
-            else {
-                await webhook.send({
-                    content: picMsg,
-                    username: userNickname,
-                    avatarURL: userAvatar
-                });
-            }
-        }
+        await emoji.detect(msg, configFile, client, userNickname, userAvatar, curchannel);
     }
 
     else if(configFile.nationList.includes(msg.guild.id)) {
-        let count = 0;
-        const scorePerCount = 100;
-        for(const word of wordsFile.badWords) {
-            if(msg.content.includes(word)) {
-                count++;
-            }
-        }
-        if(!SC.isInCooldown(userID)) {
-            for(const word of wordsFile.goodWords) {
-                if(msg.content.includes(word)) {
-                    count--;
-                    SC.cooldown(userID);
-                    break;
-                }
-            }
-        }
-        let user = await SC.getUser(userID);
-        if(user) {
-            let score = user.score;
-            let newScore = score-count*scorePerCount;
-            if(newScore <= 0) {
-                newScore = 0;
-                await msg.reply("**此人為共和國劣等公民!\n處決日期：明天黎明**");
-            }
-            await SC.editUserScore(userID, newScore);
-        }
+        WD.detect(msg, userID, wordsFile);
     }
 });
 
