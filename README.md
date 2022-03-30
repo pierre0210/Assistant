@@ -20,7 +20,7 @@
 
 ### Other features
 * for no-nitro user to use animated emojis (format: :emoji-name:)
-* reddit top post notification (testing)
+* reddit top post notification
 
 ## Setup
 1. npm install (linux user may need to run `sudo apt-get install build-essential`)
