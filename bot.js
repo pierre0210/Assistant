@@ -5,7 +5,8 @@ const { start } = require('repl');
 const util = require('./modules/utility.js');
 const WD = require('./modules/socialCreditScore/wordsDectect.js');
 const RP = require('./modules/redditRss/redditPost.js');
-const emoji = require('./modules/emoji/emoji.js')
+const emoji = require('./modules/emoji/emoji.js');
+const LOG = require('./modules/admin/log.js');
 require('dotenv').config();
 const token = process.env.TOKEN;
 const userPrefix = "->";
@@ -30,18 +31,20 @@ client.once('ready', () => {
     for(const cmd of commandFiles) {
         let tmp = require(`./commands/${cmd}`);
         client.commands.set(cmd.split(".")[0], tmp);
-        console.log(cmd + " is loaded.");
+        //console.log(cmd + " is loaded.");
     }
-    console.log("[ " + commandFiles.length + " ] commands are loaded.");
+    //console.log("[ " + commandFiles.length + " ] commands are loaded.");
+    LOG.log('START', "[ " + commandFiles.length + " ] commands are loaded.");
 
-    console.log("\n");
+    //console.log("\n");
     const slashCommandFiles = fs.readdirSync("./slashCommands/").filter(f => f.endsWith(".js"));
     for(const slash of slashCommandFiles) {
         let tmp = require(`./slashCommands/${slash}`);
         client.slashCommands.set(tmp.data.name, tmp);
-        console.log(slash + " is loaded.");
+        //console.log(slash + " is loaded.");
     }
-    console.log("[ " + slashCommandFiles.length + " ] slash commands are loaded.");
+    //console.log("[ " + slashCommandFiles.length + " ] slash commands are loaded.");
+    LOG.log('START', "[ " + slashCommandFiles.length + " ] slash commands are loaded.");
 
     var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     blackListFile.members = [];
@@ -55,7 +58,8 @@ client.once('ready', () => {
         redditPost.run();
     }, 5*60*1000);
 
-    console.log('\nLogged in as %s !', client.user.tag);
+    //console.log('\nLogged in as %s !', client.user.tag);
+    LOG.log('START', `Logged in as ${client.user.tag} !`);
 });
 
 client.on('messageCreate', async msg => {
@@ -115,6 +119,7 @@ client.on("interactionCreate", async interaction => {
         if(cmd) {
             //console.log(cmd);
             try {
+                LOG.log('RUN', `${interaction.user.username} used ${interaction.commandName}`);
                 await cmd.run(client, interaction);
             } catch(error) {
                 console.log(error);
