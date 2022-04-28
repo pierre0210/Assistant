@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, Client, Intents } = require('discord.js');
-const RT = require('./../modules/reminder/reminderTimer.js');
+const RT = require('../../modules/reminder/reminderTimer.js');
 
 /*
 function timer(msg, userid, event, time) {

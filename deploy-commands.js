@@ -7,11 +7,14 @@ const guildID = process.env.GUILD_ID;
 const token = process.env.TOKEN;
 
 const commands = [];
-const configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-const slashCommandFiles = fs.readdirSync("./slashCommands/").filter(f => f.endsWith(".js"));
-for(const slash of slashCommandFiles) {
-    let tmp = require(`./slashCommands/${slash}`);
-    commands.push(tmp.data.toJSON());
+//const configFile = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+const commandFolders = fs.readdirSync('./slashCommands');
+for (const folder of commandFolders) {
+	const commandFiles = fs.readdirSync(`./slashCommands/${folder}`).filter((file) => file.endsWith('.js'));
+	for (const file of commandFiles) {
+		const command = require(`./slashCommands/${folder}/${file}`);
+		commands.push(command.data);
+	}
 }
 
 const rest = new REST({ version: '9' }).setToken(token);

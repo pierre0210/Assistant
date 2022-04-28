@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { joinVoiceChannel, VoiceReceiver, entersState, VoiceConnectionStatus } = require('@discordjs/voice');
 const Voice = require('@discordjs/voice');
-const { createListeningStream } = require('./../modules/audio/createStream.js');
+const { createListeningStream } = require('../../modules/audio/createStream.js');
 const fs = require('fs');
 
 async function run(client, interaction) {

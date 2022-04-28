@@ -43,7 +43,8 @@ async function run(client, interaction) {
                     true
                 );
             }
-            infoEmbed.setFooter(`資料發布時間：${regionList[0].PublishTime}`);
+			infoEmbed.setFooter({ text: `資料發布時間：${regionList[0].PublishTime}` });
+            //infoEmbed.setFooter(`資料發布時間：${regionList[0].PublishTime}`);
             interaction.reply({ embeds:[infoEmbed] });
         }
     });

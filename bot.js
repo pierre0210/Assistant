@@ -37,14 +37,18 @@ client.once('ready', () => {
     LOG.log('START', "[ " + commandFiles.length + " ] commands are loaded.");
 
     //console.log("\n");
-    const slashCommandFiles = fs.readdirSync("./slashCommands/").filter(f => f.endsWith(".js"));
-    for(const slash of slashCommandFiles) {
-        let tmp = require(`./slashCommands/${slash}`);
-        client.slashCommands.set(tmp.data.name, tmp);
-        //console.log(slash + " is loaded.");
-    }
+	let count = 0;
+    const commandFolders = fs.readdirSync('./slashCommands');
+	for (const folder of commandFolders) {
+		const commandFiles = fs.readdirSync(`./slashCommands/${folder}`).filter((file) => file.endsWith('.js'));
+		for (const file of commandFiles) {
+			const command = require(`./slashCommands/${folder}/${file}`);
+			client.slashCommands.set(command.data.name, command);
+			count++;
+		}
+	}
     //console.log("[ " + slashCommandFiles.length + " ] slash commands are loaded.");
-    LOG.log('START', "[ " + slashCommandFiles.length + " ] slash commands are loaded.");
+    LOG.log('START', "[ " + count + " ] slash commands are loaded.");
 
     var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
     blackListFile.members = [];

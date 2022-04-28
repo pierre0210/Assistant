@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const SC = require('./../modules/socialCreditScore/socialCredit.js');
-const util = require('./../modules/utility.js');
+const SC = require('../../modules/socialCreditScore/socialCredit.js');
+const util = require('../../modules/utility.js');
 const fs = require('fs');
 
 async function run(client, interaction) {
