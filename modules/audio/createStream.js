@@ -5,7 +5,7 @@ const { createWriteStream } = require('node:fs');
 
 function createListeningStream(receiver, user) {
 	//console.log(user.id);
-    const opusStream = receiver.subscribe(user.id, {
+	const opusStream = receiver.subscribe(user.id, {
 		end: {
 			behavior: EndBehaviorType.Manual,
 			duration: 1000, //for slience and inactivate mode
@@ -14,7 +14,7 @@ function createListeningStream(receiver, user) {
 
 	//console.log(opusStream);
 
-    const oggStream = new prism.opus.OggLogicalBitstream({
+	const oggStream = new prism.opus.OggLogicalBitstream({
 		opusHead: new prism.opus.OpusHead({
 			channelCount: 1,
 			sampleRate: 48000, 
@@ -24,10 +24,10 @@ function createListeningStream(receiver, user) {
 		}
 	});
 
-    const filename = `./recordings/${Date.now()}-${user.username}.ogg`;
-    const out = createWriteStream(filename);
+	const filename = `./recordings/${Date.now()}-${user.username}.ogg`;
+	const out = createWriteStream(filename);
 	
-    pipeline(opusStream, oggStream, out, (err) => {
+	pipeline(opusStream, oggStream, out, (err) => {
 		//console.log(':in');
 		if (err) {
 			console.log(err);

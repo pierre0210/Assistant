@@ -16,29 +16,29 @@ client.commands = new Collection();
 client.slashCommands = new Collection();
 
 function hasAdminPermission(msg) {
-    if(msg.member.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
-        //console.log("true");
-        return true;
-    }
-    else {
-        //console.log("false");
-        return false;
-    }
+	if(msg.member.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+		//console.log("true");
+		return true;
+	}
+	else {
+		//console.log("false");
+		return false;
+	}
 }
 
 client.once('ready', () => {
-    const commandFiles = fs.readdirSync("./commands/").filter(f => f.endsWith(".js"));
-    for(const cmd of commandFiles) {
-        let tmp = require(`./commands/${cmd}`);
-        client.commands.set(cmd.split(".")[0], tmp);
-        //console.log(cmd + " is loaded.");
-    }
-    //console.log("[ " + commandFiles.length + " ] commands are loaded.");
-    LOG.log('START', "[ " + commandFiles.length + " ] commands are loaded.");
+	const commandFiles = fs.readdirSync("./commands/").filter(f => f.endsWith(".js"));
+	for(const cmd of commandFiles) {
+		let tmp = require(`./commands/${cmd}`);
+		client.commands.set(cmd.split(".")[0], tmp);
+		//console.log(cmd + " is loaded.");
+	}
+	//console.log("[ " + commandFiles.length + " ] commands are loaded.");
+	LOG.log('START', "[ " + commandFiles.length + " ] commands are loaded.");
 
-    //console.log("\n");
+	//console.log("\n");
 	let count = 0;
-    const commandFolders = fs.readdirSync('./slashCommands');
+	const commandFolders = fs.readdirSync('./slashCommands');
 	for (const folder of commandFolders) {
 		const commandFiles = fs.readdirSync(`./slashCommands/${folder}`).filter((file) => file.endsWith('.js'));
 		for (const file of commandFiles) {
@@ -47,89 +47,89 @@ client.once('ready', () => {
 			count++;
 		}
 	}
-    //console.log("[ " + slashCommandFiles.length + " ] slash commands are loaded.");
-    LOG.log('START', "[ " + count + " ] slash commands are loaded.");
+	//console.log("[ " + slashCommandFiles.length + " ] slash commands are loaded.");
+	LOG.log('START', "[ " + count + " ] slash commands are loaded.");
 
-    var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
-    blackListFile.members = [];
-    fs.writeFileSync("./blackList.json", JSON.stringify(blackListFile), (err) => {
-        if(err) console.log(err);
-    });
+	var blackListFile = JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
+	blackListFile.members = [];
+	fs.writeFileSync("./blackList.json", JSON.stringify(blackListFile), (err) => {
+		if(err) console.log(err);
+	});
 
-    const redditPost = new RP.redditPost(client);
-    redditPost.run();
-    setInterval(() => {
-        redditPost.run();
-    }, 5*60*1000);
+	const redditPost = new RP.redditPost(client);
+	redditPost.run();
+	setInterval(() => {
+		redditPost.run();
+	}, 5*60*1000);
 
-    //console.log('\nLogged in as %s !', client.user.tag);
-    LOG.log('START', `Logged in as ${client.user.tag} !`);
+	//console.log('\nLogged in as %s !', client.user.tag);
+	LOG.log('START', `Logged in as ${client.user.tag} !`);
 });
 
 client.on('messageCreate', async msg => {
-    if(msg.author.bot) return;
+	if(msg.author.bot) return;
 	if(msg.channel.type === 'dm') return;
 	if(msg.webhookID) return;
-    //if(hasAdminPermission(msg)) console.log("true");
-    //else console.log("false");
+	//if(hasAdminPermission(msg)) console.log("true");
+	//else console.log("false");
 
-    var configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
-    var wordsFile = await JSON.parse(fs.readFileSync("./modules/socialCreditScore/words.json", "utf-8"));
-    var blackListFile = await JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
-    const userTag = msg.author.tag;
+	var configFile = await JSON.parse(fs.readFileSync("./config.json", "utf8"));
+	var wordsFile = await JSON.parse(fs.readFileSync("./modules/socialCreditScore/words.json", "utf-8"));
+	var blackListFile = await JSON.parse(fs.readFileSync("./blackList.json", "utf8"));
+	const userTag = msg.author.tag;
 	const userID = msg.author.id;
-    const userNickname = msg.guild.members.cache.get(userID).nickname ? msg.guild.members.cache.get(userID).nickname : msg.author.username; 
+	const userNickname = msg.guild.members.cache.get(userID).nickname ? msg.guild.members.cache.get(userID).nickname : msg.author.username; 
 	const userAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=256`;
-    const userLargeAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=1024`;
-    var now = new Date();
+	const userLargeAvatar = `https://cdn.discordapp.com/avatars/${userID}/${msg.author.avatar}.png?size=1024`;
+	var now = new Date();
 
-    //const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
-    const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
-    const curchannel = msg.channel.id;
-    const hasMuteRole = muteRole.id ? msg.member.roles.cache.has(muteRole.id) : false;
+	//const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
+	const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
+	const curchannel = msg.channel.id;
+	const hasMuteRole = muteRole.id ? msg.member.roles.cache.has(muteRole.id) : false;
 
-    if(msg.content.startsWith(userPrefix) && (userID === configFile.botOwner || hasAdminPermission(msg))) {
-        const args = msg.content.slice(userPrefix.length).split(' ');
+	if(msg.content.startsWith(userPrefix) && (userID === configFile.botOwner || hasAdminPermission(msg))) {
+		const args = msg.content.slice(userPrefix.length).split(' ');
 		const cmd = args.shift().toLowerCase();
 
-        let command = client.commands.get(cmd);
-        if(command) {
-            command.run(client, msg, userTag, userID, args);
-        }
-    }
+		let command = client.commands.get(cmd);
+		if(command) {
+			command.run(client, msg, userTag, userID, args);
+		}
+	}
 
-    else if((hasMuteRole || blackListFile.members.includes(userID)) && userID != configFile.botOwner) {
-        msg.delete();
-    }
+	else if((hasMuteRole || blackListFile.members.includes(userID)) && userID != configFile.botOwner) {
+		msg.delete();
+	}
 
-    else if(msg.content.endsWith("機率") && configFile.probChannels.includes(curchannel)) {
-        await msg.channel.send(`${util.getRandomNum(0, 100)}%`);
-    }
+	else if(msg.content.endsWith("機率") && configFile.probChannels.includes(curchannel)) {
+		await msg.channel.send(`${util.getRandomNum(0, 100)}%`);
+	}
 
-    else if(msg.content.startsWith(":") && msg.content.endsWith(":")) { 
-        await emoji.detect(msg, configFile, client, userNickname, userAvatar, curchannel);
-    }
+	else if(msg.content.startsWith(":") && msg.content.endsWith(":")) { 
+		await emoji.detect(msg, configFile, client, userNickname, userAvatar, curchannel);
+	}
 
-    else if(configFile.nationList.includes(msg.guild.id)) {
-        WD.detect(msg, userID, wordsFile);
-    }
+	else if(configFile.nationList.includes(msg.guild.id)) {
+		WD.detect(msg, userID, wordsFile);
+	}
 });
 
 client.on("interactionCreate", async interaction => {
-    if (interaction.user.bot) return;
-    if (interaction.isCommand()) {
-        const cmd = client.slashCommands.get(interaction.commandName);
+	if (interaction.user.bot) return;
+	if (interaction.isCommand()) {
+		const cmd = client.slashCommands.get(interaction.commandName);
 
-        if(cmd) {
-            //console.log(cmd);
-            try {
-                LOG.log('RUN', `${interaction.user.username} used ${interaction.commandName}`);
-                await cmd.run(client, interaction);
-            } catch(error) {
-                console.log(error);
-            }
-        }
-    }
+		if(cmd) {
+			//console.log(cmd);
+			try {
+				LOG.log('RUN', `${interaction.user.username} used ${interaction.commandName}`);
+				await cmd.run(client, interaction);
+			} catch(error) {
+				console.log(error);
+			}
+		}
+	}
 });
 
 client.login(token);

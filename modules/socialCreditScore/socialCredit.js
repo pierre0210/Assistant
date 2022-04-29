@@ -16,7 +16,7 @@ async function isUserExists(id) {
 }
 
 async function addNewUser(id) {
-    return await user.create({
+	return await user.create({
 		user_id: id,
 		score: 1000
 	});
