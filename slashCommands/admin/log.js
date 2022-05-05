@@ -14,7 +14,7 @@ async function run(client, interaction) {
 				return;
 			}
 			await interaction.deferReply();
-			const channel = interaction.options.getString('channel');
+			const channel = interaction.options.getChannel('channel').id;
 			const user = interaction.options.getUser('user');
 			const connection = joinVoiceChannel({
 				channelId: channel,
@@ -64,7 +64,7 @@ module.exports.data = new SlashCommandBuilder()
 	.addSubcommand(sub => sub
 		.setName('audio')
 		.setDescription('save conversation (admin only)')
-		.addStringOption(option => option.setName('channel').setDescription('target channel').setRequired(true))
+		.addChannelOption(option => option.setName('channel').setDescription('target channel').setRequired(true))
 		.addUserOption(option => option.setName('user').setDescription('target user').setRequired(true)))
 	.addSubcommand(sub => sub
 		.setName('leave')

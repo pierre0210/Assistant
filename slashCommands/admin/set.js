@@ -16,7 +16,7 @@ async function run(client, interaction) {
 	var logFile = JSON.parse(fs.readFileSync('./log.json', 'utf-8'));
 	if(interaction.user.id === configFile.botOwner || interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
 		if(interaction.options.getSubcommand() === 'aec') {
-			const channelID = interaction.options.getString('channel');
+			const channelID = interaction.options.getChannel('channel').id;
 			if(!isInList(configFile.emojiChannels, channelID)) {
 				configFile.emojiChannels.push(channelID);
 				fs.writeFileSync('./config.json', JSON.stringify(configFile, null, 4), (err) => {
@@ -29,7 +29,7 @@ async function run(client, interaction) {
 			}
 		}
 		else if(interaction.options.getSubcommand() === 'rec') {
-			const channelID = interaction.options.getString('channel');
+			const channelID = interaction.options.getChannel('channel').id;
 			if(isInList(configFile.emojiChannels, channelID)) {
 				for(let i=0; i<configFile.emojiChannels.length; i++) {
 					if(configFile.emojiChannels[i] === channelID) {
@@ -46,7 +46,7 @@ async function run(client, interaction) {
 			}
 		}
 		else if(interaction.options.getSubcommand() === 'acc') {
-			const channelID = interaction.options.getString('channel');
+			const channelID = interaction.options.getChannel('channel').id;
 			if(!isInList(configFile.probChannels, channelID)) {
 				configFile.probChannels.push(channelID);
 				fs.writeFileSync('./config.json', JSON.stringify(configFile, null, 4), (err) => {
@@ -59,7 +59,7 @@ async function run(client, interaction) {
 			}
 		}
 		else if(interaction.options.getSubcommand() === 'rcc') {
-			const channelID = interaction.options.getString('channel');
+			const channelID = interaction.options.getChannel('channel').id;
 			if(isInList(configFile.probChannels, channelID)) {
 				for(let i=0; i<configFile.probChannels.length; i++) {
 					if(configFile.probChannels[i] === channelID) {
@@ -148,19 +148,19 @@ module.exports.data = new SlashCommandBuilder()
 	.addSubcommand(sub => sub
 		.setName('aec')
 		.setDescription('add emoji channel (admin only)')
-		.addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
+		.addChannelOption(option => option.setName('channel').setDescription('target channel').setRequired(true)))
 	.addSubcommand(sub => sub
 		.setName('rec')
 		.setDescription('remove emoji channel (admin only)')
-		.addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
+		.addChannelOption(option => option.setName('channel').setDescription('target channel').setRequired(true)))
 	.addSubcommand(sub => sub
 		.setName('acc')
 		.setDescription('add chance keyword channel (admin only)')
-		.addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
+		.addChannelOption(option => option.setName('channel').setDescription('target channel').setRequired(true)))
 	.addSubcommand(sub => sub
 		.setName('rcc')
 		.setDescription('remove chance keyword channel (admin only)')
-		.addStringOption(option => option.setName('channel').setDescription('target channel id').setRequired(true)))
+		.addChannelOption(option => option.setName('channel').setDescription('target channel').setRequired(true)))
 	.addSubcommand(sub => sub
 		.setName('asn')
 		.setDescription('add subreddit notification (admin only)')
