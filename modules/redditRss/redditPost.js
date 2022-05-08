@@ -41,7 +41,7 @@ class redditPost {
 				for(let channel of logFile.reddit[key].channels) {
 					for(let post of newPostList) {
 						const $ = cheerio.load(post.content);
-						const imageUrl = $('span')[0].children[0].attribs.href;
+						const imageUrl = $('span')[0].children[0].attribs?.href;
 						//console.log(imageUrl);
 						let title = post.title;
 						if(post.title.length > 256) {
