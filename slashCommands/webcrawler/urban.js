@@ -5,9 +5,11 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 async function run(client, interaction) {
-	const keyword = interaction.options.getString('keyword');
+	const keyword = interaction.options.getString('keyword').split(' ').join('%20');
 	const url = `https://www.urbandictionary.com/define.php?term=${keyword}`;
 	const embed = new MessageEmbed().setColor('#03fcdb');
+
+	await interaction.deferReply();
 
 	axios.get(url).then(async ({ data }) => {
 		const $ = cheerio.load(data);
@@ -25,10 +27,10 @@ async function run(client, interaction) {
 			.setDescription(definition.first().text().length > 4096 ? definition.first().text().substring(0, 4093)+'...' : definition.first().text())
 			.addField('Example: ', example.first().text().length > 1024 ? example.first().text().substring(0, 1021)+'...' : example.first().text());
 		
-		await interaction.reply({ embeds: [embed] });
+		await interaction.followUp({ embeds: [embed] });
 	})
 	.catch(async (err) => {
-		await interaction.reply('錯誤! 請稍後再試');
+		await interaction.followUp('錯誤! 無此單字\n或請稍後再試');
 		return;
 	});
 }
