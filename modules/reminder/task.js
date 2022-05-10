@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('task_table', {
 		user_id: {
 			type: DataTypes.STRING,
-			primaryKey: true
+			allowNull: true
 		},
 		time: {
 			type: DataTypes.INTEGER,

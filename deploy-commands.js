@@ -25,12 +25,13 @@ for(let i=0; i<configFile.guildList.length; i++) {
 		.catch(console.error);
 }
 */
-
+// console.log(commands);
+/*
 rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands })
 		.then(() => console.log('Successfully registered application commands.'))
 		.catch(console.error);
-/*
+*/
+
 rest.put(Routes.applicationCommands(clientID), { body: commands })
 	.then(() => console.log('Successfully registered application commands.'))
 	.catch(console.error);
-*/
