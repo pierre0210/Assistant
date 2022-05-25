@@ -15,7 +15,7 @@ async function run(client, interaction) {
 			}
 			await interaction.deferReply();
 			const channel = interaction.options.getChannel('channel').id;
-			const user = interaction.options.getUser('user').id;
+			const user = interaction.options.getUser('user');
 			const connection = joinVoiceChannel({
 				channelId: channel,
 				guildId: interaction.guild.id,
@@ -33,7 +33,7 @@ async function run(client, interaction) {
 			}
 			*/
 			//new VoiceReceiver().subscribe()
-			connection.receiver.speaking.once('start', (user) => {
+			connection.receiver.speaking.once('start', (userid) => {
 				createListeningStream(connection.receiver, user);
 			});
 			
