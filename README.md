@@ -1,6 +1,8 @@
 # Assistent discord bot
 
 ## Features
+This bot is designed to help every members in your discord server, with multiple useful features range from information command such as showing weather forecast and air quality index to voice chat logging command for server admin. 
+It is still under developping some features might change from time to time, current commands are shown as follows.
 ### Custom prefix
 * mute command
 * ping bonk command
@@ -15,7 +17,7 @@
 * foreign exchange command
 * embed message command `useful for important post`
 * vote & poll command `(user friendly)`
-* setting command for emoji, reddit post channel and keyword triggers
+* setting commands for emoji, reddit post channel and keyword triggers
 * voice chat logging
 * urban dictionary webcrawler command
 
