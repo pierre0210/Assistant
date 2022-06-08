@@ -2,11 +2,12 @@ const Discord = require('discord.js');
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const { start } = require('repl');
-const util = require('./modules/utility.js');
+const util = require('./modules/utilities/utility.js');
 const WD = require('./modules/socialCreditScore/wordsDectect.js');
 const RP = require('./modules/redditRss/redditPost.js');
 const emoji = require('./modules/emoji/emoji.js');
 const LOG = require('./modules/admin/log.js');
+const TRANS = require('./modules/utilities/translation.js');
 require('dotenv').config();
 const token = process.env.TOKEN;
 const userPrefix = "->";
@@ -112,6 +113,10 @@ client.on('messageCreate', async msg => {
 
 	else if(configFile.nationList.includes(msg.guild.id)) {
 		WD.detect(msg, userID, wordsFile);
+	}
+
+	else if(configFile.translationList[msg.channel.id]) {
+		TRANS.run(client, msg, userAvatar, userNickname);
 	}
 });
 
