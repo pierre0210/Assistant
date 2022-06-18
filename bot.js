@@ -98,7 +98,7 @@ client.on('messageCreate', async msg => {
 		}
 	}
 
-	else if((hasMuteRole || blackListFile.members.includes(userID)) && userID != configFile.botOwner) {
+	else if((blackListFile.members.includes(userID)) && userID != configFile.botOwner) {
 		msg.delete();
 	}
 
