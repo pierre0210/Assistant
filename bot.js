@@ -84,9 +84,9 @@ client.on('messageCreate', async msg => {
 	var now = new Date();
 
 	//const adminRole = msg.guild.roles.cache.find(role => role.name === configFile.adminRole);
-	const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
+	//const muteRole = msg.guild.roles.cache.find(role => role.name === configFile.muteRole);
 	const curchannel = msg.channel.id;
-	const hasMuteRole = muteRole.id ? msg.member.roles.cache.has(muteRole.id) : false;
+	//const hasMuteRole = muteRole.id ? msg.member.roles.cache.has(muteRole.id) : false;
 
 	if(msg.content.startsWith(userPrefix) && (userID === configFile.botOwner || hasAdminPermission(msg))) {
 		const args = msg.content.slice(userPrefix.length).split(' ');
